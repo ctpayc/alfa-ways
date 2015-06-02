@@ -15,7 +15,6 @@ export default (
   <Route name='app' path='/' handler={App}>
     <Route name='trips' path='/trips' handler={Trips}>
       <Route name="currenttrip" path=":tripId" handler={Currenttrip}/>
-      
     </Route>
     <Route name='page2' path='/2page' handler={Page2} />
     <Route name='LeftMenu' path='/leftmenuitems' handler={Page3} >
