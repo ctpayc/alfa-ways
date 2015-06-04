@@ -4,20 +4,18 @@
 'use strict';
 
 import React from 'react';
+import { Link, Route, RouteHandler } from 'react-router';
 
 class Trips extends React.Component {
  
   render() {
     return (
       <div>
-        {'Absolute Menu Items'}
         <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-          <li>4</li>
-          <li>5</li>
+          <li><Link to="currenttrip" params={{tripId: "123"}} query={{tab: "tab1"}}>trip 123</Link></li>
+          <li><Link to="currenttrip" params={{tripId: "abc"}}>trip abc</Link></li>
         </ul>
+        
       </div>
     );
   }

@@ -10,7 +10,7 @@ class Page3 {
     return (
       <div className="3page">
         <h1>
-          Left Menu Items
+          Page3
         </h1>
       </div>
     );

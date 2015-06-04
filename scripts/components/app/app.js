@@ -5,6 +5,7 @@
 "use strict";
 import React from 'react';
 import Router from 'react-router';
+import Trips from '../trips/trips';
 import LeftNavbar from '../leftsidebar/leftnavbar';
 import TopNavbar from '../leftsidebar/topnavbar';
 import LeftMenuAjax from '../leftsidebar/LeftMenuAjax';

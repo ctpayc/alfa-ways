@@ -4,25 +4,30 @@
 'use strict';
 
 import React from 'react';
+import Router from 'react-router';
+// var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
 class Currenttrip extends React.Component {
- 
-  render() {
+
+  render () {
+    
+    var tripId = this.props.params.tripId;
+    var queryTab = this.props.query.tab;
+    console.log(tripId);
+    console.log(queryTab);
     return (
-      <div>
-        {'Absolute Menu Items'}
-        <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-          <li>4</li>
-          <li>5</li>
-        </ul>
+      <div className="Task">
+        <h2>Trip id: {tripId}</h2>
+        {queryTab}
       </div>
     );
   }
+
 }
 
 Currenttrip.defaultProps = { initialCount: 4 };
+Currenttrip.contextTypes = {
+  router: React.PropTypes.func
+};
 
 export default Currenttrip;

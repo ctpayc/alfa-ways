@@ -2,6 +2,6 @@
 import React from 'react';
 import router from './router';
 
-router.run((Handler) => {
-  React.render(<Handler/>, document.body);
+router.run((Handler, state) => {
+  React.render(<Handler {...state}/>, document.body);
 });

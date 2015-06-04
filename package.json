@@ -23,7 +23,7 @@
     "eslint-plugin-react": "^2.2.0",
     "ip": "^0.3.2",
     "react-hot-loader": "^1.2.5",
-    "react-router": "^0.13.2",
+    "react-router": "^0.13.3",
     "webpack": "^1.8.9",
     "webpack-dev-server": "^1.8.2"
   }
