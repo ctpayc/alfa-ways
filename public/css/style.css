@@ -7,3 +7,17 @@
 .selectItem {
 	background: red;
 }
+.trip-search-results {
+	margin: 0 0 0 -10px;
+	border-top: 1px solid #CCC;
+}
+.trip {
+	list-style: none;
+	border: 0;
+	border-bottom: 1px solid #CCC;
+}
+.validation-error {
+	color: #670c09;
+	margin: 5px 0 0 0;
+	display: inline-block;
+}

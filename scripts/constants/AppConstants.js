@@ -1,21 +1,35 @@
-'use strict';
-
 import keyMirror from 'react/lib/keyMirror';
 
-export default keyMirror({
-  REQUEST_USER: null,
-  REQUEST_USER_SUCCESS: null,
-  REQUEST_USER_ERROR: null,
+var APIRoot = "http://laraveltest";
 
-  REQUEST_REPO: null,
-  REQUEST_REPO_SUCCESS: null,
-  REQUEST_REPO_ERROR: null,
+module.exports = {
 
-  REQUEST_STARRED_REPOS_PAGE: null,
-  REQUEST_STARRED_REPOS_PAGE_SUCCESS: null,
-  REQUEST_STARRED_REPOS_PAGE_ERROR: null,
+  APIEndpoints: {
+    LOGIN:          APIRoot + "/v1/login",
+    REGISTRATION:   APIRoot + "/v1/users",
+    Trips:          APIRoot + "/api/get/trips",
+    AddTrip:        APIRoot + "/api/addtrip"
+  },
 
-  REQUEST_STARGAZER_PAGE: null,
-  REQUEST_STARGAZER_PAGE_SUCCESS: null,
-  REQUEST_STARGAZER_PAGE_ERROR: null
-});
+  PayloadSources: keyMirror({
+    SERVER_ACTION: null,
+    VIEW_ACTION: null
+  }),
+
+  ActionTypes: keyMirror({
+    // Session
+    LOGIN_REQUEST: null,
+    LOGIN_RESPONSE: null,
+
+    // Routes
+    REDIRECT: null,
+
+    LOAD_TRIPS: null,
+    RECEIVE_TRIPS: null,
+    LOAD_TRIP: null,
+    RECEIVE_TRIP: null,
+    CREATE_TRIP: null,
+    RECEIVE_CREATED_TRIP: null
+  })
+
+};

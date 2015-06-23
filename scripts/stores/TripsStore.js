@@ -3,73 +3,88 @@
 
 // import BaseStore from './BaseStore';
 import { EventEmitter } from 'events';
-import MenuActions from '../actions/MenuActions';
 import AppDispatcher from '../dispatchers/AppDispatcher';
+import AppConstants from '../constants/AppConstants';
 import GetWebApi from '../utils/GetWebApi';
 
-import {
-  ITEMS_UPDATED,
-  ITEMS_GET_SUCCESS
-} from '../constants/MenuItemsConstants';
+var ActionTypes = AppConstants.ActionTypes;
+var CHANGE_EVENT = 'change';
 
-class MenuItemsStore extends EventEmitter {
+var _trips = [];
+var _errors = {};
+var _trip = { id: "", user_id: "", description: "", from_id: "", to_id: "", start: ""};
+
+class TripsStore extends EventEmitter {
 
   emitChange() {
-    this.emit(ITEMS_UPDATED);
+    this.emit(CHANGE_EVENT);
   }
 
   addChangeListener(callback) {
-    this.on(ITEMS_UPDATED, callback);
+    this.on(CHANGE_EVENT, callback);
   }
 
   removeChangeListener(callback) {
-    this.removeListener(ITEMS_UPDATED, callback);
+    this.removeListener(CHANGE_EVENT, callback);
   }
 
-  setAll() {
-    return 'set All from MenuItemsStore';
+  getAllTrips() {
+    return _trips;
   }
 
-  getAll() {
-    // $.get('http://laraveltest/api/get/items', function(result) {
-    //   console.log(result);
-    // });
-    var resp;
-    // resp = GetWebApi.getOb();
-    resp = 10;
-    resp = GetWebApi.getOb();
-    console.log(resp);
-    // for (var i = 0; i < 3; i++) {
-    //   console.log(resp);
-    // }
-    return {
-      items: [
-        {
-          id: 0,
-          label: 'item 0'
-        },
-        {
-          id: 1,
-          label: 'item 111'
-        },
-        {
-          id: 2,
-          label: 'item 223'
-        }
-      ]
-    };
-  };
+  getTrip() {
+    return _trip;
+  }
+
+  getErrors() {
+    return _errors;
+  }
+
 }
 
-let store = new MenuItemsStore();
+let store = new TripsStore();
 
-AppDispatcher.register((action) => {
-  switch(action.actionType) {
-    case ITEMS_GET_SUCCESS:
-      store.setAll(action.items);
+AppDispatcher.register((payload) => {
+  var action = payload.action;
+  console.log('TripsStore__AppDispatcher.register action = ');
+  console.log(action);
+  switch(action.type) {
+    case ActionTypes.RECEIVE_TRIPS:
+      // _trips = {trips: 'TripsStore__AppDispatcher.register'};
+      console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIPS... trips = ');
+      _trips = action.json;
+      console.log(_trips);
+      store.emitChange();
       break;
-    default:
-  }
+
+    case ActionTypes.RECEIVE_CREATED_TRIP:
+      if (action.json) {
+        _trips.unshift(action.json.trip);
+        _errors = [];
+      }
+      if (action.errors) {
+        _errors = action.errors;
+      }
+      store.emitChange();
+      break;
+
+    case ActionTypes.RECEIVE_TRIP:
+      console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIP... trip = ');
+      console.log(_trip);
+      if (action.json) {
+        console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIP... action good, trip = ');
+        _trip = action.json.trip;
+        _errors = [];
+        _trip = action.json;
+        console.log(_trip);
+      }
+      if (action.errors) {
+        _errors = action.errors;
+      }
+      store.emitChange();
+      break;
+    }
+  return true;
 });
 
 export default store;
