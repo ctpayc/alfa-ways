@@ -14,7 +14,7 @@ module.exports = {
   },
 
   receiveTrips: function(json) {
-    console.log('ServerActionCreators__receiveTrips... json = ' + json);
+    // console.log('ServerActionCreators__receiveTrips... json = ' + json);
     AppDispatcher.handleServerAction({
       type: ActionTypes.RECEIVE_TRIPS,
       json: json

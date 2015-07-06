@@ -4,7 +4,8 @@ var request = require('superagent');
 
 function _getErrors(res) {
   var errorMsgs = ["Something went wrong, please try again"];
-  if ((json = JSON.parse(res.text))) {
+  if (res) {
+    var json = JSON.parse(res.text);
     if (json['errors']) {
       errorMsgs = json['errors'];
     } else if (json['error']) {
@@ -72,7 +73,7 @@ module.exports = {
   },
 
   loadTrip: function(tripId) {
-    request.get(APIEndpoints.Trips + '/' + tripId)
+    request.get(APIEndpoints.Trip + '/' + tripId)
       .set('Accept', 'application/json')
       // .set('Authorization', sessionStorage.getItem('accessToken'))
       .end(function(error, res){
@@ -86,37 +87,26 @@ module.exports = {
   },
 
   createTrip: function(data) {
-/*    request.post(APIEndpoints.Trips)
-      .set('Accept', 'application/json')
-      // .set('Authorization', sessionStorage.getItem('accessToken'))
-      .send({ Trip: { title: title, body: body } })
-      .end(function(error, res){
-        if (res) {
-          if (res.error) {
-            var errorMsgs = _getErrors(res);
-            ServerActionCreators.receiveCreatedTrip(null, errorMsgs);
-          } else {
-            json = JSON.parse(res.text);
-            ServerActionCreators.receiveCreatedTrip(json, null);
-          }
-        }
-      });
-*/
     request.post(APIEndpoints.AddTrip)
     .set('Accept', 'application/json')
-    //.withCredentials()
     .type('json')
-    .send({"description":data.description, "user_id": data.driver, "from": data.from, "to": data.to})
+    .send({"description":data.description, "user_id": data.driver, "from": data.from, "to": data.to, "departure": data.departure})
     .end(function(error, res){
-      console.log('addtrip callback; data.from');
+      // console.log('addtrip callback; data.from');
+      if(error) {
+        console.log('error!!! ');
+        console.log(error);
+      }
       if(res) {
+        console.log(res);
         if (res.error) {
+          // console.log(res);
           var errorMsgs = _getErrors(res);
           // ServerActionCreators.receiveCreatedTrip(null, errorMsgs);
-          console.log(errorMsgs);
+          // console.log(errorMsgs);
         } else {
-          // json = JSON.parse(res.text);
-          console.log(res.text);
+          var json = JSON.parse(res.text);
+          // console.log(res.text);
         }
       }
     });

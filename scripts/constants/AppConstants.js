@@ -7,8 +7,9 @@ module.exports = {
   APIEndpoints: {
     LOGIN:          APIRoot + "/v1/login",
     REGISTRATION:   APIRoot + "/v1/users",
-    Trips:          APIRoot + "/api/get/trips",
-    AddTrip:        APIRoot + "/api/addtrip"
+    Trips:          APIRoot + "/api/v1/get/trips",
+    Trip:           APIRoot + "/api/v1/get/trips",
+    AddTrip:        APIRoot + "/api/v1/addtrip"
   },
 
   PayloadSources: keyMirror({

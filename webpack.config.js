@@ -4,6 +4,8 @@ var ip = require('ip');
 var port = 3000;
 ip = ip.address();
 
+// require('react-widgets/dist/css/react-widgets.css');
+
 module.exports = {
   devtool: 'eval',
   entry: [
@@ -29,6 +31,8 @@ module.exports = {
       loaders: ['react-hot', 'babel'],
       include: path.join(__dirname, 'scripts'),
       exclude: /node_modules/
-    }]
+    },
+    { test: /.css$/,  loader: "style-loader!css-loader" }
+    ]
   }
 };

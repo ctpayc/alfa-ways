@@ -18,6 +18,22 @@ var RouteHandler = Router.RouteHandler;
 
 export default class App extends React.Component {
 
+  constructor(... args) {
+    super(... args);
+    this.state = {
+      loadContent: false
+    };
+    console.log(this.state);
+  }
+
+  componentWillMount() {
+    
+  }
+
+  componentDidMount() {
+    // this.setState({loadContent: true});
+  }
+
   render() {
       return (
         <div className="App">

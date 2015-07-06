@@ -11,7 +11,7 @@ class TripsList extends React.Component {
     return (
       <ul className={'trip-search-result'}>
         {this.props.trips.map(function(trip, index){
-          return <li key={trip.id} className={'trip'}>
+          return <li key={index} className={'trip'}>
                   <Link to="currenttrip" params={{tripId: trip.id}}>
                     <article className={'row'}>
                       <div className={'user'}>

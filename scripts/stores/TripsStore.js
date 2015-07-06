@@ -46,14 +46,14 @@ let store = new TripsStore();
 
 AppDispatcher.register((payload) => {
   var action = payload.action;
-  console.log('TripsStore__AppDispatcher.register action = ');
-  console.log(action);
+  // console.log('TripsStore__AppDispatcher.register action = ');
+  // console.log(action);
   switch(action.type) {
     case ActionTypes.RECEIVE_TRIPS:
       // _trips = {trips: 'TripsStore__AppDispatcher.register'};
-      console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIPS... trips = ');
+      // console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIPS... trips = ');
       _trips = action.json;
-      console.log(_trips);
+      // console.log(_trips);
       store.emitChange();
       break;
 
@@ -69,14 +69,14 @@ AppDispatcher.register((payload) => {
       break;
 
     case ActionTypes.RECEIVE_TRIP:
-      console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIP... trip = ');
-      console.log(_trip);
+      // console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIP... trip = ');
+      // console.log(_trip);
       if (action.json) {
-        console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIP... action good, trip = ');
+        // console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIP... action good, trip = ');
         _trip = action.json.trip;
         _errors = [];
         _trip = action.json;
-        console.log(_trip);
+        // console.log(_trip);
       }
       if (action.errors) {
         _errors = action.errors;
