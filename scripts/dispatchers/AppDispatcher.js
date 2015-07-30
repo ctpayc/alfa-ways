@@ -8,7 +8,8 @@ var PayloadSources = AppConstants.PayloadSources;
 class AppDispatcher extends Flux.Dispatcher {
 
   handleServerAction(action) {
-    // console.log('AppDispatcher__handleServerAction... action = ' + action);
+    console.log('AppDispatcher__handleServerAction... action = ');
+    console.log(action);
     var payload = {
       source: PayloadSources.SERVER_ACTION,
       action: action
@@ -17,7 +18,8 @@ class AppDispatcher extends Flux.Dispatcher {
   }
 
   handleViewAction(action) {
-    // console.log('AppDispatcher__handleViewAction... action = ' + action);
+    console.log('AppDispatcher__handleViewAction... action = ');
+    console.log(action);
     var payload = {
       source: PayloadSources.VIEW_ACTION,
       action: action

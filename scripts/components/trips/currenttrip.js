@@ -7,7 +7,7 @@ import React from 'react';
 import TripsStore from '../../stores/TripsStore';
 import TripActions from '../../actions/TripActions';
 import { Link, Route, RouteHandler } from 'react-router';
-import Loader from 'halogen/PulseLoader';
+import Loader from 'halogen/MoonLoader';
 
 var ErrorNotice = require('../common/ErrorNotice.react.js');
 
@@ -49,7 +49,8 @@ class Currenttrip extends React.Component {
 
   render () {
     if (isEmpty(this.state.trip)) {
-      errors = ['no trip']
+      this.state.errors.push('no trip');
+      errors = <ErrorNotice errors={this.state.errors}/>;
     } else {
       var tripId = this.props.params.tripId;
       var queryTab = this.props.query.tab;
@@ -59,16 +60,14 @@ class Currenttrip extends React.Component {
               margin: 'auto'
           };
       var errors = (this.state.errors.length > 0) ? <ErrorNotice errors={this.state.errors}/> : <div></div>;
-      // console.log(tripId);
-      // console.log(queryTab);
-    }
-    var spinner = (this.state.loadContent === false) ? <div style={style}><Loader color="#26A65B" /></div> : <div>
+      var spinner = (this.state.loadContent === false) ? <div style={style}><Loader color="#26A65B" /></div> : <div>
           <h1>Trip id: {tripId}</h1>
           <h2>Время отправления: {this.state.trip.departure}</h2>
           <h2>Время прибытия: {this.state.trip.arrival}</h2>
           <h2>Description: {this.state.trip.description}</h2>
           {queryTab}
           </div>;
+    }
     return (
       <div className="Task">
         {spinner}

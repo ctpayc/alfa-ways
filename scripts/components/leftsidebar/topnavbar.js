@@ -27,6 +27,7 @@ class TopNavbar {
               <li><Link to="trips">Поездки</Link></li>
               <li><Link to="page2">Объявления</Link></li>
               <li><Link to="addtrip">Добавить поездку</Link></li>
+              <li><Link to="autocomplete">autocomplete</Link></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li className="dropdown">

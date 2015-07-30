@@ -13,6 +13,7 @@
     "flux": "^2.0.1",
     "halogen": "^0.1.10",
     "react": "^0.13.2",
+    "react-select": "^0.5.4",
     "superagent": "^1.2.0",
     "underscore": "^1.8.3"
   },
@@ -27,7 +28,9 @@
     "ip": "^0.3.2",
     "react-hot-loader": "^1.2.5",
     "react-router": "^0.13.3",
+    "react-typeahead": "^1.1.2",
     "react-widgets": "^2.7.2",
+    "vow": "^0.4.10",
     "webpack": "^1.8.9",
     "webpack-dev-server": "^1.8.2"
   }

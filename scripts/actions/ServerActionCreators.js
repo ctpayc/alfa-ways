@@ -27,6 +27,20 @@ module.exports = {
       json: json
     });
   },
+
+  receiveDrivers: function(json) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_DRIVERS,
+      json: json
+    });
+  },
+
+  receiveDriverSearch: function(json) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_SEARCH_DRIVER,
+      json: json
+    });
+  },
   
   receiveCreatedTrip: function(json, errors) {
     AppDispatcher.handleServerAction({

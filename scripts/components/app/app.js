@@ -23,7 +23,7 @@ export default class App extends React.Component {
     this.state = {
       loadContent: false
     };
-    console.log(this.state);
+    // console.log(this.state);
   }
 
   componentWillMount() {

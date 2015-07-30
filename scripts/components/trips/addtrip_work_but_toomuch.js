@@ -7,7 +7,11 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import { Link, Route, RouteHandler } from 'react-router';
 import TripActions from '../../actions/TripActions';
-import AutocompleteDrivers from '../autocomplete/AutocompleteDrivers';
+
+import Select from 'react-select';
+import DriversStore from '../../stores/DriversStore';
+import DriverActions from '../../actions/DriverActions';
+var vow = require('vow');
 
 var request = require('superagent');
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
@@ -23,7 +27,6 @@ class AddTrip extends React.Component {
     this.enableButton = this.enableButton.bind(this);
     this.disableButton = this.disableButton.bind(this);
     this.changeDate = this.changeDate.bind(this);
-    this.addDriver = this.addDriver.bind(this);
   }
 
   onSubmit(data) {
@@ -31,10 +34,6 @@ class AddTrip extends React.Component {
     console.log(data);
     // var datetoIsoString = data.dateinput.toISOString();
     // console.log(datetoIsoString);
-  }
-
-  addDriver() {
-    console.log('_______________addDriver_______________');
   }
 
   changeDate(date) {
@@ -56,8 +55,8 @@ class AddTrip extends React.Component {
 
     return (
       <div className={'col-md-4'}>
-        <Formsy.Form onSubmit={this.onSubmit} onValid={this.enableButton} className="form-addtrip">
-          <MyOwnInputAutocomplete name="driver" title="Driver" validations="minLength:5" validationError="Выберите существующего водитея" required />
+        <Formsy.Form name="addtrip" onSubmit={this.onSubmit} onValid={this.enableButton} className="form-addtrip">
+          <MyOwnInputAutocomplete inputChange={this.inputChange} name="driver" title="Driver" validations="minLength:5" validationError="Выберите существующего водитея" required />
           <MyOwnInput name="from" title="From" validations="minLength:3" validationError="Введите правильную локацию" required />
           <MyOwnInput name="to" title="To" validations="minLength:3" validationError="Введите правильную локацию" required />
           <MyOwnInputDate type="date" name="departureDay" title="When" validationError="Необходимо указать корректную дату" required />
@@ -80,9 +79,6 @@ var MyOwnInputAutocomplete = React.createClass({
     console.log('_______________changedriver_______________');
     console.log(this.refs.driver.state.driverId);
     this.setValue(this.refs.driver.state.driverId);
-  },
-  fire: function() {
-    console.log('_______________fire_______________');
   },
   render: function () {
 
@@ -107,8 +103,8 @@ var MyOwnInputAutocomplete = React.createClass({
     return (
       <div className={divClassName}>
         <label htmlFor={this.props.name}>{this.props.title}</label>
-        <div className={'AutocompleteDrivers'} onKeyUp={this.changedriver} >
-          <AutocompleteDrivers ref="driver" />
+        <div className={'AutocompleteDrivers'} onKeyUp={this.props.inputChange} >
+          {this.props.children}
         </div>
         {errorIcon}
         <span className='validation-error'>{errorMessage}</span>
@@ -116,6 +112,109 @@ var MyOwnInputAutocomplete = React.createClass({
     );
   }
 });
+
+class AutocompleteDrivers extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      options: DriversStore.getAllDrivers(),
+      loadingOptions: false,
+      newValue: "Введите ФИО водителя...",
+      isLoading: false,
+      driverId: null,
+      errors: []
+    }
+    this.inputChange = this.inputChange.bind(this);
+    this._onChange = this._onChange.bind(this);
+    this.updateValue = this.updateValue.bind(this);
+  }
+
+  componentDidMount() {
+    DriverActions.loadDrivers();
+    DriversStore.addChangeListener(this._onChange);
+  }
+
+  componentWillUnmount() {
+    DriversStore.removeChangeListener(this._onChange);
+  }
+
+  _onChange(){
+    this.setState({options: DriversStore.getAllDrivers()});
+  }
+
+  updateValue(newVal, option) {
+    if (option.length = 1) {
+      var currentDriverId = option[0].id;
+    } else {
+      var currentDriverId = 0;
+    }
+    this.setState({newValue: newVal, driverId: currentDriverId});
+    // console.log('AutocompleteDrivers____onChange... = ' + newVal);
+    // console.log(this);
+    // var inp = this.refs.inputvalue.state.id;
+  }
+
+  inputChangeDebounced(name) {
+    var dfd = vow.defer();
+    var timerId = this.timerId;
+    var self = this;
+    if (timerId) {
+        clearTimeout(timerId);
+    }
+    timerId = setTimeout((function (innerName) {
+            return function () {
+                dfd.resolve(innerName);
+            }
+        })(name), 1000);
+    this.timerId = timerId;
+    return dfd.promise();
+  }
+
+  inputChange(event){
+    var inp = this.refs.inputvalue.state.inputValue;
+
+    if (event.keyCode != 13 || event.keyCode != 27 || event.keyCode != 38 || event.keyCode != 40 || event.keyCode != 9) {
+      console.log('_____________________event keyCode ==============' + event.keyCode)
+      if (inp.length > 2 && inp !== '') {
+        this.inputChangeDebounced(name).then(function (result) {
+          DriverActions.searchDrivers(inp);
+        });
+      }
+    }
+  }
+
+  renderOption(option) {
+    return (<div>
+            <strong>{option.label}</strong>
+            <p><span>{option.post} | {option.place}</span></p>
+            </div>);
+  }
+
+  renderValue(option) {
+    return <strong style={{ color: option.hex }}>{option.id}</strong>;
+  }
+
+  render() {
+    return (
+      <MyOwnInputAutocomplete name="driver" title="Driver" inputChange={this.inputChange}>
+        <Select
+          ref="inputvalue"
+          name="drivers"
+          value={this.state.newValue}
+          options={this.state.options}
+          optionRenderer={this.renderOption}
+          valueRenderer={this.renderValue}
+          onChange={this.updateValue}
+          ignoreCase={true}
+          clearable={false}
+          isLoadingSnipper={this.state.isLoading}
+          className="remote-example" />
+      </MyOwnInputAutocomplete>
+    );
+  }
+}
+
 
 var MyOwnInputDate = React.createClass({
 
