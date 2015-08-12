@@ -292,7 +292,6 @@ ul.rw-list.rw-list-grouped > li.rw-list-option,
 .rw-widget {
   background-color: #ffffff;
   border: #cccccc 1px solid;
-  border-radius: 4px;
 }
 .rw-widget .rw-input {
   border-bottom-left-radius: 4px;

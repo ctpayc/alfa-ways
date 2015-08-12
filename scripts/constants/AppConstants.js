@@ -5,8 +5,8 @@ var APIRoot = "http://laraveltest";
 module.exports = {
 
   APIEndpoints: {
-    LOGIN:          APIRoot + "/v1/login",
-    REGISTRATION:   APIRoot + "/v1/users",
+    LOGIN:          APIRoot + "/api/v1/login",
+    REGISTRATION:   APIRoot + "/api/v1/signup",
     Trips:          APIRoot + "/api/v1/get/trips",
     Trip:           APIRoot + "/api/v1/get/trips",
     AddTrip:        APIRoot + "/api/v1/addtrip",

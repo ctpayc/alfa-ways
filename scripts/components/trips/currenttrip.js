@@ -53,7 +53,6 @@ class Currenttrip extends React.Component {
       errors = <ErrorNotice errors={this.state.errors}/>;
     } else {
       var tripId = this.props.params.tripId;
-      var queryTab = this.props.query.tab;
       var style = {
               maxWidth: '5%',
               maxHeight: '10%',
@@ -65,7 +64,6 @@ class Currenttrip extends React.Component {
           <h2>Время отправления: {this.state.trip.departure}</h2>
           <h2>Время прибытия: {this.state.trip.arrival}</h2>
           <h2>Description: {this.state.trip.description}</h2>
-          {queryTab}
           </div>;
     }
     return (

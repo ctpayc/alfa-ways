@@ -6,6 +6,9 @@ var ErrorNotice = React.createClass({
       <div className="alert alert-danger" role="alert">
         <ul>
           {this.props.errors.map(function(error, index){
+            if (Array.isArray(error)) {
+              console.log('AAARRRRAAAYYYY');
+            }
             return <li className="error-notice__error" key={"error-"+index}>{error}</li>;
           })}
         </ul>

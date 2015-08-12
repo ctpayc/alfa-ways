@@ -85,6 +85,7 @@ class AutocompleteTest extends React.Component {
         textField='label'
         data={this.state.options}
         onSearch={this.inputChange}
+        busy={true}
         filter='contains'
         itemComponent={ListItem} />
     );

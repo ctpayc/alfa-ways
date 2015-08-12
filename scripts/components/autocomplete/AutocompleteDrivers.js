@@ -7,31 +7,21 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import DriversStore from '../../stores/DriversStore';
 import DriverActions from '../../actions/DriverActions';
-import Select from 'react-select';
 import { Link, Route, RouteHandler } from 'react-router';
 
 var request = require('superagent');
 var vow = require('vow');
 
-class SelectContainer extends React.Component {
-  render(){
-    return (
-      <div className={'form-group'}>
-        <div onKeyUp={this.props.inputChange}>{this.props.children}</div>
-      </div>)
-  }
-}
+var Select = require('react-widgets/lib/Multiselect');
 
-class AutocompleteDrivers extends React.Component {
+class AutocompleteTest extends React.Component {
 
   constructor(props){
     super(props);
     this.state = {
+      driverId: 0,
       options: DriversStore.getAllDrivers(),
-      loadingOptions: false,
-      newValue: "Введите ФИО водителя...",
       isLoading: false,
-      driverId: null,
       errors: []
     }
     this.inputChange = this.inputChange.bind(this);
@@ -42,26 +32,27 @@ class AutocompleteDrivers extends React.Component {
   componentDidMount() {
     DriverActions.loadDrivers();
     DriversStore.addChangeListener(this._onChange);
+
   }
 
   componentWillUnmount() {
     DriversStore.removeChangeListener(this._onChange);
   }
 
-  _onChange(){
-    this.setState({options: DriversStore.getAllDrivers()});
+  componentWillReceiveProps(values) {
+    console.log('______________________componentWillReceiveProps______________________');
+    console.log(values);
+    //this.setState({});
   }
 
-  updateValue(newVal, option) {
-    if (option.length = 1) {
-      var currentDriverId = option[0].id;
-    } else {
-      var currentDriverId = 0;
-    }
-    this.setState({newValue: newVal, driverId: currentDriverId});
-    // console.log('AutocompleteDrivers____onChange... = ' + newVal);
-    // console.log(this);
-    // var inp = this.refs.inputvalue.state.id;
+  _onChange(){
+    this.setState({options: DriversStore.getAllDrivers(), isLoading: false});
+  }
+
+  updateValue(values) {
+    this.setState({driverId: values.id});
+    console.log('______________________SelectValue______________________');
+    console.log(values.id);
   }
 
   inputChangeDebounced(name) {
@@ -80,46 +71,52 @@ class AutocompleteDrivers extends React.Component {
     return dfd.promise();
   }
 
-  inputChange(){
-    var inp = this.refs.inputvalue.state.inputValue;
+  inputChange(inp){
+    // var inp = this.refs.inputvalue.state.inputValue;
     if (inp.length > 2 && inp !== '') {
+      this.setState({isLoading: true});
       this.inputChangeDebounced(name).then(function (result) {
         DriverActions.searchDrivers(inp);
       });
+    } else {
+      this.setState({options: []});
     }
   }
 
-  renderOption(option) {
-    return (<div>
-            <strong>{option.label}</strong>
-            <p><span>{option.post} | {option.place}</span></p>
-            </div>);
-  }
-
-  renderValue(option) {
-    return <strong style={{ color: option.hex }}>{option.id}</strong>;
-  }
-
   render() {
+    var ListItem = React.createClass({
+      render() {
+        var person = this.props.item;
+        if (person.id === 0) {
+          return (
+            <strong>Не найдено</strong>
+          )
+        } else {
+          return (
+            <div>
+              <strong>{person.label}</strong>
+              <p><span>{person.post} | {person.place}</span></p>
+            </div>);
+        }
+      }
+    })
     return (
-      <SelectContainer inputChange={this.inputChange}>
-        <Select
-          ref="inputvalue"
-          name="drivers"
-          value={this.state.newValue}
-          options={this.state.options}
-          optionRenderer={this.renderOption}
-          valueRenderer={this.renderValue}
-          onChange={this.updateValue}
-          ignoreCase={true}
-          clearable={false}
-          isLoadingSnipper={this.state.isLoading}
-          className="remote-example" />
-      </SelectContainer>
+      <Select 
+        placeholder='Введите ФИО водителя'
+        defaultValue={null}
+        valueField='id'
+        textField='label'
+        data={this.state.options}
+        onSearch={this.inputChange}
+        onChange={value => this.setState({ driverId: value[0].id })}
+        busy={this.state.isLoading}
+        filter='contains'
+        itemComponent={ListItem}
+        onSelect={this.props.selectDriver} />
     );
   }
 }
 
-AutocompleteDrivers.defaultProps = {};
+AutocompleteTest.defaultProps = {};
 
-export default AutocompleteDrivers;
+export default AutocompleteTest;

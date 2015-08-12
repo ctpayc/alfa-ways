@@ -90,23 +90,21 @@ module.exports = {
     request.post(APIEndpoints.AddTrip)
     .set('Accept', 'application/json')
     .type('json')
-    .send({"description":data.description, "user_id": data.driver, "from": data.from, "to": data.to, "departure": data.departure})
+    .send({"description":data.description, "user_id": data.driver, "from": data.from, "to": data.to, "departureDay": data.departureDay, "departureTime": data.departureTime})
     .end(function(error, res){
-      // console.log('addtrip callback; data.from');
       if(error) {
         console.log('error!!! ');
         console.log(error);
       }
       if(res) {
-        console.log(res);
         if (res.error) {
-          // console.log(res);
           var errorMsgs = _getErrors(res);
-          // ServerActionCreators.receiveCreatedTrip(null, errorMsgs);
-          // console.log(errorMsgs);
+          ServerActionCreators.receiveCreatedTrip(null, errorMsgs);
         } else {
           var json = JSON.parse(res.text);
-          // console.log(res.text);
+          console.log('TripsWebUtils__createTrip___________');
+          console.log(json);
+          ServerActionCreators.receiveCreatedTrip(json, null);
         }
       }
     });

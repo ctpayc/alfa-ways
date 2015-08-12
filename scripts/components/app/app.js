@@ -10,6 +10,7 @@ import LeftNavbar from '../leftsidebar/leftnavbar';
 import TopNavbar from '../leftsidebar/topnavbar';
 import LeftMenuAjax from '../leftsidebar/LeftMenuAjax';
 import MenuActions from '../../actions/MenuActions';
+import AuthStore from '../../stores/AuthStore';
 
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
@@ -21,23 +22,32 @@ export default class App extends React.Component {
   constructor(... args) {
     super(... args);
     this.state = {
-      loadContent: false
+      loadContent: false,
+      isLoggedIn: AuthStore.isLoggedIn(),
+      email: AuthStore.getEmail()
     };
-    // console.log(this.state);
-  }
-
-  componentWillMount() {
-    
+    console.log(this.state);
+    this._onChange = this._onChange.bind(this);
   }
 
   componentDidMount() {
-    // this.setState({loadContent: true});
+    AuthStore.addChangeListener(this._onChange);
+  }
+
+  componentWillMount() {
+    AuthStore.removeChangeListener(this._onChange);
+  }
+  _onChange() {
+    this.setState({isLoggedIn: AuthStore.isLoggedIn(),
+      email: AuthStore.getEmail()});
   }
 
   render() {
       return (
         <div className="App">
-          <TopNavbar />
+          <TopNavbar 
+            isLoggedIn={this.state.isLoggedIn}
+            email={this.state.email} />
           <div className="container-fluid">
             {/* <div className="col-md-2">
               <LeftNavbar item1="MainLeftMenu" />

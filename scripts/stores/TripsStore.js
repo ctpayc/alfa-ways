@@ -12,6 +12,8 @@ var CHANGE_EVENT = 'change';
 
 var _trips = [];
 var _errors = {};
+var _messages = [];
+var _newTripId = null;
 var _trip = { id: "", user_id: "", description: "", from_id: "", to_id: "", start: ""};
 
 class TripsStore extends EventEmitter {
@@ -40,6 +42,13 @@ class TripsStore extends EventEmitter {
     return _errors;
   }
 
+  getMessages() {
+    return _messages;
+  }
+
+  getCreatedTripId() {
+    return _newTripId;
+  }
 }
 
 let store = new TripsStore();
@@ -58,8 +67,12 @@ AppDispatcher.register((payload) => {
       break;
 
     case ActionTypes.RECEIVE_CREATED_TRIP:
+      console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_CREATED_TRIP... trip = ');
+      console.log(action.json);
       if (action.json) {
         _trips.unshift(action.json.trip);
+        _messages = action.json.message;
+        _newTripId = action.json.tripId;
         _errors = [];
       }
       if (action.errors) {
