@@ -1,6 +1,6 @@
 import keyMirror from 'react/lib/keyMirror';
 
-var APIRoot = "http://192.168.1.240";
+var APIRoot = "http://localhost:4000";
 
 module.exports = {
 
