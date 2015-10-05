@@ -8,6 +8,7 @@ import TripsStore from '../../stores/TripsStore';
 import TripActions from '../../actions/TripActions';
 import { Link, Route, RouteHandler } from 'react-router';
 import Loader from 'halogen/MoonLoader';
+import AuthStore from '../../stores/AuthStore';
 
 var ErrorNotice = require('../common/ErrorNotice.react.js');
 
@@ -18,21 +19,20 @@ class Currenttrip extends React.Component {
     this.state = {
       trip: TripsStore.getTrip(),
       loadContent: false,
-      errors: []
+      errors: [],
+      isLoggedIn: AuthStore.isLoggedIn(),
     };
     this.onChange = this.onChange.bind(this);
     console.log(this.state);
   }
 
   componentWillMount() {
-    // getAllItems();
-    // TripActions.loadTrips();
+    TripActions.loadTrip(this.props.params.tripId);
+    TripsStore.addChangeListener(this.onChange);
   }
 
   componentDidMount() {
-    console.log('currenttrip__componentDidMount');
-    TripActions.loadTrip(this.props.params.tripId);
-    TripsStore.addChangeListener(this.onChange);
+    
   }
 
   componentWillUnmount() {
@@ -48,11 +48,17 @@ class Currenttrip extends React.Component {
   }
 
   render () {
+    console.log('isLoggedIn & user_id');
+    console.log(this.state.isLoggedIn);
+    console.log(this.state.trip.user_id);
+    console.log(AuthStore.getUserId());
+    var editButton = (this.state.isLoggedIn === true && this.state.trip.user_id == AuthStore.getUserId()) ? <Link to="edittrip" params={{tripId: this.props.params.tripId}}>edit</Link> : <div></div>;
     if (isEmpty(this.state.trip)) {
       this.state.errors.push('no trip');
       errors = <ErrorNotice errors={this.state.errors}/>;
     } else {
       var tripId = this.props.params.tripId;
+      var driverName = (this.state.loadContent === true && this.state.trip.driver !== null) ? this.state.trip.driver.name: 'не найден';
       var style = {
               maxWidth: '5%',
               maxHeight: '10%',
@@ -61,9 +67,13 @@ class Currenttrip extends React.Component {
       var errors = (this.state.errors.length > 0) ? <ErrorNotice errors={this.state.errors}/> : <div></div>;
       var spinner = (this.state.loadContent === false) ? <div style={style}><Loader color="#26A65B" /></div> : <div>
           <h1>Trip id: {tripId}</h1>
+          <h1>Водитель: {driverName}</h1>
+          <h2>Откуда: {this.state.trip.from_location_id}</h2>
+          <h2>Куда: {this.state.trip.to_location_id}</h2>
           <h2>Время отправления: {this.state.trip.departure}</h2>
           <h2>Время прибытия: {this.state.trip.arrival}</h2>
           <h2>Description: {this.state.trip.description}</h2>
+          {editButton}
           </div>;
     }
     return (

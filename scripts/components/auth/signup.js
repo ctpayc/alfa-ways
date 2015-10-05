@@ -1,59 +1,73 @@
 import React from 'react';
 import LoginActions from '../../actions/LoginActions.js';
 import AuthStore from '../../stores/AuthStore.js';
+import Loader from 'halogen/MoonLoader';
 
 var ErrorNotice = require('../../components/common/ErrorNotice.react.js');
+var MessageNotice = require('../common/MessageNotice.react.js');
 
-class Signup extends React.Component {
-
-  constructor(... args) {
-    super(... args);
-    this.state = {
+var Signup = React.createClass ({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+  getInitialState: function() {
+    return {
       errors: [],
+      messages: [],
       isSubmitting: true,
+      isLoggedIn: AuthStore.isLoggedIn(),
+      isBusy: false
     };
-    this._onSubmit = this._onSubmit.bind(this);
-    this._onChange = this._onChange.bind(this);
-    this.enableButton = this.enableButton.bind(this);
-    this.disableButton = this.disableButton.bind(this);
-    console.log('signup.js state........');
-    console.log(this.state);
-  }
-
-  componentDidMount() {
+  },
+  componentDidMount: function() {
     AuthStore.addChangeListener(this._onChange);
-  }
-
-  componentWillUnmount() {
+  },
+  componentWillUnmount: function() {
     AuthStore.removeChangeListener(this._onChange);
-  }
-
-  _onChange() {
-    console.log('signup _onChange errors =====');
-    console.log(this.state.errors);
-    this.setState({ errors: AuthStore.getErrors() });
-  }
-
-  _onSubmit(data) {
-    console.log('data');
-    console.log(data);
-    this.setState({ errors: [] });
-    console.log(this.state.errors);
+  },
+  _onChange: function() {
+    var self = this;
+    this.setState({ errors: AuthStore.getErrors(), isLoggedIn: AuthStore.isLoggedIn(), isBusy: false });
+    console.log(this.state.isBusy);
+    if (this.state.errors.length == 0 && this.state.isLoggedIn == true) {
+      this.setState({messages: ['Logged in successfully!']});
+      setTimeout(function () {
+        self.context.router.transitionTo('/');
+      }, 3000);
+    }
+  },
+  _onSubmit: function(data) {
+    this.setState({isBusy: true, errors: []});
+    console.log(this.state.isBusy);
     LoginActions.signup(data.email, data.name, data.post, data.place, data.password, data.passwordConfirmation);
-  }
-  enableButton() {
+  },
+  enableButton: function() {
     this.setState({isSubmitting: true});
-  }
-
-  disableButton() {
+  },
+  disableButton: function() {
     this.setState({isSubmitting: false});
-  }
-
-  render() {
+  },
+  render: function() {
     var errors = (this.state.errors.length > 0) ? <ErrorNotice errors={this.state.errors}/> : <div></div>;
+    var style = {
+            maxWidth: '15%',
+            maxHeight: '10%',
+            margin: 'auto'
+        };
+    var spinner = (this.state.isBusy === true) ? <div style={style}><Loader color="#666666" /></div> : <div></div>;
+    if (this.state.isLoggedIn === true) {
+      var messages = <MessageNotice messages={this.state.messages}/>;
+      return (
+        <div>
+          {messages}
+        </div>
+      );
+    }
     return (
       <div className={'col-md-4'}>
+        {spinner}
         {errors}
+        {messages}
         <Formsy.Form onSubmit={this._onSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="form-signin">
           <MyOwnInput name="email" title="Email" validations="isEmail" validationError="Введите правильный электронный адрес" required />
           <MyOwnInput name="name" title="ФИО" validations="minLength:3" validationError="ФИО должно быть больше 3 знаков" required />
@@ -66,7 +80,8 @@ class Signup extends React.Component {
       </div>
     );
   }
-}
+});
+
 var MyOwnInput = React.createClass({
 
   // Add the Formsy Mixin

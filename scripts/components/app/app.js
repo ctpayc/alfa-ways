@@ -3,8 +3,11 @@
  */
 
 "use strict";
+
+require('./test.scss');
+
 import React from 'react';
-import Router from 'react-router';
+import { Link, Route, RouteHandler } from 'react-router';
 import Trips from '../trips/trips';
 import LeftNavbar from '../leftsidebar/leftnavbar';
 import TopNavbar from '../leftsidebar/topnavbar';
@@ -12,15 +15,12 @@ import LeftMenuAjax from '../leftsidebar/LeftMenuAjax';
 import MenuActions from '../../actions/MenuActions';
 import AuthStore from '../../stores/AuthStore';
 
-var DefaultRoute = Router.DefaultRoute;
-var Link = Router.Link;
-var Route = Router.Route;
-var RouteHandler = Router.RouteHandler;
+let { PropTypes } = React;
 
 export default class App extends React.Component {
 
-  constructor(... args) {
-    super(... args);
+  constructor(props, context) {
+    super(props);
     this.state = {
       loadContent: false,
       isLoggedIn: AuthStore.isLoggedIn(),
@@ -29,6 +29,9 @@ export default class App extends React.Component {
     console.log(this.state);
     this._onChange = this._onChange.bind(this);
   }
+  // static contextTypes = {
+  //   router: PropTypes.func.isRequired
+  // };
 
   componentDidMount() {
     AuthStore.addChangeListener(this._onChange);
@@ -38,8 +41,16 @@ export default class App extends React.Component {
     AuthStore.removeChangeListener(this._onChange);
   }
   _onChange() {
-    this.setState({isLoggedIn: AuthStore.isLoggedIn(),
-      email: AuthStore.getEmail()});
+    var loginState = this.state.isLoggedIn;
+    console.log(loginState);
+    this.setState({
+      isLoggedIn: AuthStore.isLoggedIn(),
+      email: AuthStore.getEmail()
+    });
+    console.log(this.state.isLoggedIn);
+    if (loginState === false && this.state.isLoggedIn === true) {
+      // this.context.router.replaceWith('/');
+    }
   }
 
   render() {
@@ -60,6 +71,10 @@ export default class App extends React.Component {
       );
   }
 
+}
+
+App.contextTypes = {
+  router: React.PropTypes.func.isRequired
 }
 
 export default App;

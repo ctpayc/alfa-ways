@@ -61,7 +61,8 @@ module.exports = {
   loadTrips: function() {
     console.log('TripsWebUtils__loadTrips (APIEndpoints.Trips) = ' + APIEndpoints.Trips);
     request.get(APIEndpoints.Trips)
-      // .set('Authorization', sessionStorage.getItem('accessToken'))
+      .set('Authorization', 'Bearer ' + localStorage.getItem('accessToken'))
+      // .set('zzz', "sss")
       .end(function(error, res){
         if (res) {
           var json = JSON.parse(res.text);
@@ -88,6 +89,30 @@ module.exports = {
 
   createTrip: function(data) {
     request.post(APIEndpoints.AddTrip)
+    .set('Accept', 'application/json')
+    .type('json')
+    .send({"description":data.description, "user_id": data.driver, "from": data.from, "to": data.to, "departureDay": data.departureDay, "departureTime": data.departureTime})
+    .end(function(error, res){
+      if(error) {
+        console.log('error!!! ');
+        console.log(error);
+      }
+      if(res) {
+        if (res.error) {
+          var errorMsgs = _getErrors(res);
+          ServerActionCreators.receiveCreatedTrip(null, errorMsgs);
+        } else {
+          var json = JSON.parse(res.text);
+          console.log('TripsWebUtils__createTrip___________');
+          console.log(json);
+          ServerActionCreators.receiveCreatedTrip(json, null);
+        }
+      }
+    });
+  },
+
+  updateTrip: function(data) {
+    request.post(APIEndpoints.UpdateTrip + '/' + data.trip)
     .set('Accept', 'application/json')
     .type('json')
     .send({"description":data.description, "user_id": data.driver, "from": data.from, "to": data.to, "departureDay": data.departureDay, "departureTime": data.departureTime})

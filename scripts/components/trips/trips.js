@@ -28,7 +28,7 @@ class Trips extends React.Component {
   }
 
   componentWillMount() {
-    TripActions.loadTrips();
+
   }
 
   componentDidMount() {

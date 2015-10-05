@@ -4,7 +4,9 @@ import React from 'react';
 import { Route, Redirect, RouteHandler, Link, NotFoundRoute, DefaultRoute } from 'react-router';
 import App from './components/app/app';
 import Trips from './components/trips/trips';
+import Test from './components/test/Test';
 import AddTrip from './components/trips/addtrip';
+import EditTrip from './components/trips/edittrip';
 import Login from './components/auth/login';
 import Signup from './components/auth/signup';
 import Currenttrip from './components/trips/currenttrip';
@@ -23,6 +25,8 @@ export default (
     <Route name="currenttrip" path="trips/:tripId" handler={Currenttrip} />
     <Route name='page2' path='/2page' handler={Page2} />
     <Route name='addtrip' path='/addtrip' handler={AddTrip} />
+    <Route name='edittrip' path='/edittrip/:tripId' handler={EditTrip} />
+    <Route name='test' path='/test' handler={Test} />
     <Route name='maintrips2' path='/maintrips2' handler={MainTrips} />
     <NotFoundRoute handler={Page4} />
   </Route>

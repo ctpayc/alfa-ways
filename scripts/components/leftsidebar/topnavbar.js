@@ -3,6 +3,8 @@
  */
 "use strict";
 
+require('./navbar.scss');
+
 import React from 'react';
 import Router from 'react-router';
 import LoginActions from '../../actions/LoginActions';
@@ -34,7 +36,7 @@ class TopNavbar extends React.Component {
         <li><Link to="signup">Sign up</Link></li>
       </ul>
     );
-    var addtrip = this.props.isLoggedIn ? (<li><Link to="addtrip">Добавить поездку</Link></li>) : ''
+    var addtrip = this.props.isLoggedIn ? (<li><Link to="addtrip">Добавить поездку</Link></li>) : null;
     return (
       <nav className='navbar navbar-default'>
         <div className="container-fluid">
@@ -52,6 +54,7 @@ class TopNavbar extends React.Component {
               <li><Link to="trips">Поездки</Link></li>
               <li><Link to="page2">Объявления</Link></li>
               {addtrip}
+              <li><Link to="test">test</Link></li>
             </ul>
             {rightNav}
           </div>

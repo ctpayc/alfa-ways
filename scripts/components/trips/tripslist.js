@@ -11,14 +11,20 @@ class TripsList extends React.Component {
     return (
       <ul className={'trip-search-result'}>
         {this.props.trips.map(function(trip, index){
+          console.log(trip);
+          if (trip.driver) {
+            var driver = trip.driver.name;
+          } else {
+            var driver = 'не найден';
+          }
           return <li key={index} className={'trip'}>
-                  <Link to="currenttrip" params={{tripId: trip.id}}>
+                  <Link to="currenttrip" params={{tripId: trip.trip.id}}>
                     <article className={'row'}>
                       <div className={'user'}>
-                        <h1>User Id: {trip.user_id}</h1>
+                        <h1>Водитель: {driver}</h1>
                       </div>
                       <div className={'description'}>
-                        <h2>Description: {trip.description}</h2>
+                        <h2>Description: {trip.trip.description}</h2>
                       </div>
                     </article>
                   </Link>

@@ -22,11 +22,11 @@ module.exports = {
     WebAPIUtils.searchDrivers(data);
   },
   
-  loadDriver: function(tripId) {
+  loadDriver: function(DriverId) {
     // console.log('DriverActions__loadTrip');
     AppDispatcher.handleViewAction({
       type: ActionTypes.LOAD_DRIVER,
-      tripId: tripId
+      DriverId: DriverId
     });
     WebAPIUtils.loadDriver(DriverId);
   },

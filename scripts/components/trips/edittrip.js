@@ -8,8 +8,8 @@ import Formsy from 'formsy-react';
 import { Link, Route, RouteHandler, Redirect, Navigation } from 'react-router';
 import TripActions from '../../actions/TripActions';
 import TripsStore from '../../stores/TripsStore';
-import AuthStore from '../../stores/AuthStore';
 import AutocompleteDrivers from '../autocomplete/AutocompleteDrivers';
+import Loader from 'halogen/MoonLoader';
 
 var ErrorNotice = require('../common/ErrorNotice.react.js');
 var MessageNotice = require('../common/MessageNotice.react.js');
@@ -26,33 +26,28 @@ Formsy.addValidationRule('isMoreThan', function (values, value, minValue) {
   return Number(value) != Number(minValue);
 });
 
-var AddTrip = React.createClass ({
+var EditTrip = React.createClass ({
 
   contextTypes: {
     router: React.PropTypes.func
   },
-  statics: {
-    willTransitionTo: function (transition) {
-      if (!AuthStore.isLoggedIn()) {
-        transition.redirect('login');
-      }
-    }
-  },
 
   getInitialState: function() {
     return {
+      tripId: this.props.params.tripId,
+      driverId: this.props.params.driverId,
       isSubmitting: true,
-      stateAdding: false,
-      newTripId: null,
+      stateUpdate: false,
+      isLoading: true,
+      trip: {},
+      driver: {},
       messages: []
-      // isLoggedIn: AuthStore.isLoggedIn()
     };
   },
 
   componentWillMount: function() {
-    // Handler.transitionTo('login');
+    TripActions.loadTrip(this.state.tripId);
   },
-
   componentDidMount: function() {
     TripsStore.addChangeListener(this._onChange);
   },
@@ -60,15 +55,19 @@ var AddTrip = React.createClass ({
     TripsStore.removeChangeListener(this._onChange);
   },
   _onChange: function() {
-    var self = this;
-    this.setState({messages: TripsStore.getMessages(), stateAdding: true, newTripId: TripsStore.getCreatedTripId()});
-    setTimeout(function () {
-      self.context.router.transitionTo('currenttrip', {tripId: TripsStore.getCreatedTripId()});
-    }, 3000);
+    this.setState({trip: TripsStore.getTrip(this.state.tripId), messages: TripsStore.getMessages(), isLoading: false});
+    // var self = this;
+    // this.setState({messages: TripsStore.getMessages(), stateAdding: true, newTripId: TripsStore.getCreatedTripId()});
+    // setTimeout(function () {
+    //   self.context.router.transitionTo('currenttrip', {tripId: TripsStore.getCreatedTripId()});
+    // }, 3000);
   },
 
   onSubmit: function(data) {
-    TripActions.createTrip(data);
+    console.log('_____________________data_________________');
+    console.log(data);
+    this.setState({stateUpdate: true, isLoading: true});
+    TripActions.updateTrip(data);
   },
 
   enableButton: function() {
@@ -80,7 +79,19 @@ var AddTrip = React.createClass ({
   },
 
   render: function() {
-    if (this.state.stateAdding === true) {
+    if (this.state.isLoading === true) {
+      var style = {
+            maxWidth: '5%',
+            maxHeight: '10%',
+            margin: 'auto'
+        };
+      var spinner = <div style={style}><Loader color="#666666" /></div>;
+      return (
+        <div>
+          {spinner}
+        </div>
+      );
+    } if (this.state.stateUpdate === true) {
       var messages = <MessageNotice messages={this.state.messages}/>;
       return (
         <div>
@@ -88,17 +99,20 @@ var AddTrip = React.createClass ({
         </div>
       );
     } else {
+      console.log('_____________________this.state.trip.driver_________________');
+      console.log(this.state.trip.driver);
       return (
         <div className={'col-md-4'}>
           <Formsy.Form onSubmit={this.onSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="form-addtrip">
-            <MyOwnInputAutocompleteDriver name="driver" title="Driver"  validations="isMoreThan:0" validationError="Выберите существующего водитея" required />
-            <MyOwnInput name="from" title="From" validations="minLength:3" validationError="Введите правильную локацию" required />
-            <MyOwnInput name="to" title="To" validations="minLength:3" validationError="Введите правильную локацию" required />
+            <MyOwnInput type="hidden" name="trip" value={this.state.trip.id} validations="isMoreThan:0" showError required />
+            <MyOwnInputAutocompleteDriver name="driver" title="Driver" defValue={this.state.trip.driver} validations="isMoreThan:0" validationError="Выберите существующего водитея" required />
+            <MyOwnInput name="from" title="From" validations="isMoreThan:0" value={this.state.trip.from_location_id} validationError="Введите правильную локацию" required />
+            <MyOwnInput name="to" title="To" validations="isMoreThan:0" value={this.state.trip.to_location_id} validationError="Введите правильную локацию" required />
             <div className={'row'}>
-              <MyOwnInputDate type="date" name="departureDay" title="Day" validationError="Необходимо указать корректную дату" required />
-              <MyOwnInputTime type="date" name="departureTime" title="Time" required />
+              <MyOwnInputDate type="date" name="departureDay" title="Day" defValue={this.state.trip.departure} validationError="Необходимо указать корректную дату" required />
+              <MyOwnInputTime type="date" name="departureTime" title="Time" defValue={this.state.trip.departure} required />
             </div>
-            <MyOwnInput type="textarea" name="description" title="Description" validations="minLength:1" validationError="Введите краткое описание (комментарий)" required />
+            <MyOwnInput type="textarea" name="description" title="Description" value={this.state.trip.description} validations="minLength:1" validationError="Введите краткое описание (комментарий)" required />
             <button type="submit" disabled={!this.state.isSubmitting}>Submit</button>
           </Formsy.Form>
         </div>
@@ -115,12 +129,22 @@ var MyOwnInputAutocompleteDriver = React.createClass ({
     return {
       options: [],
       isLoading: false,
+      defDriver: null,
       errors: []
     }
   },
 
+  componentWillMount: function() {
+    var defId = this.props.defValue.id;
+    var defLabel = this.props.defValue.name;
+    this.setState({options: [{id: defId, label: defLabel}], defDriver: defId});
+    this.updateValue(this.props.defValue);
+  },
+
   componentDidMount: function() {
     DriversStore.addChangeListener(this._onChange);
+    console.log('_____________________options_________________');
+    console.log(this.state.options);
   },
 
   componentWillUnmount: function() {
@@ -187,13 +211,15 @@ var MyOwnInputAutocompleteDriver = React.createClass ({
             </div>);
         }
       }
-    })
+    });
+    // console.log('_____________________options render_________________');
+    // console.log(this.state.options[0].id);
     return (
       <div className={divClassName}>
         <label htmlFor={this.props.name}>{this.props.title}</label>
         <Select
           placeholder='Введите ФИО водителя'
-          defaultValue={null}
+          defaultValue={this.state.defDriver}
           valueField='id'
           textField='label'
           data={this.state.options}
@@ -211,6 +237,15 @@ var MyOwnInputAutocompleteDriver = React.createClass ({
 
 var MyOwnInputDate = React.createClass({
   mixins: [Formsy.Mixin],
+  getInitialStates: function() {
+    return {
+      defDate: null
+    }
+  },
+  componentWillMount: function() {
+    this.setState({defDate: new Date(this.props.defValue)});
+    this.changeDate(new Date(this.props.defValue));
+  },
   changeValue: function (event) {
     this.setValue(event.currentTarget.value);
   },
@@ -227,11 +262,12 @@ var MyOwnInputDate = React.createClass({
       var errorIcon = '';
     }
     var errorMessage = this.getErrorMessage();
+    var errorMessage = this.getErrorMessage();
     return (
       <div className={'col-md-6'}>
         <div className={divClassName}>
           <label htmlFor={this.props.name}>{this.props.title}</label>
-          <DateTimePicker name={this.props.name} defaultValue={null} min={new Date()} onChange={this.changeDate} editFormat={"d.MM.yyyy"} format={"MMM dd yyyy"} time={false}/>
+          <DateTimePicker name={this.props.name} defaultValue={this.state.defDate} min={new Date()} onChange={this.changeDate} editFormat={"d.MM.yyyy"} format={"MMM dd yyyy"} time={false}/>
           {errorIcon}
           <span className='validation-error'>{errorMessage}</span>
         </div>
@@ -241,6 +277,15 @@ var MyOwnInputDate = React.createClass({
 });
 var MyOwnInputTime = React.createClass({
   mixins: [Formsy.Mixin],
+  getInitialStates: function() {
+    return {
+      defDate: null
+    }
+  },
+  componentWillMount: function() {
+    this.setState({defDate: new Date(this.props.defValue)});
+    this.changeDate(new Date(this.props.defValue));
+  },
   changeValue: function (event) {
     this.setValue(event.currentTarget.value);
   },
@@ -261,7 +306,7 @@ var MyOwnInputTime = React.createClass({
       <div className={'col-md-6'}>
         <div className={divClassName}>
           <label htmlFor={this.props.name}>{this.props.title}</label>
-          <DateTimePicker name={this.props.name} defaultValue={null} onChange={this.changeDate} timeFormat="HH:mm" format={"HH:mm"} calendar={false}/>
+          <DateTimePicker name={this.props.name} defaultValue={this.state.defDate} onChange={this.changeDate} timeFormat="HH:mm" format={"HH:mm"} calendar={false}/>
           {errorIcon}
           <span className='validation-error'>{errorMessage}</span>
         </div>
@@ -288,7 +333,6 @@ var MyOwnInput = React.createClass({
     // passed to the input. showError() is true when the
     // value typed is invalid
     var className = this.props.className + ' ' + (this.showRequired() ? 'required' : this.showError() ? 'error' : null);
-
     if (this.changeValue) {
       var divClassName = 'form-group ' + (this.showError() ? 'has-error has-feedback' : '');
       var errorIcon = (this.showError() ? <span className="glyphicon glyphicon-remove form-control-feedback"></span> : '');
@@ -299,7 +343,9 @@ var MyOwnInput = React.createClass({
     // An error message is returned ONLY if the component is invalid
     // or the server has returned an error message
     var errorMessage = this.getErrorMessage();
-
+    if (this.props.type == 'hidden') {
+      var divClassName = '';
+    }
     return (
       <div className={divClassName}>
         <label htmlFor={this.props.name}>{this.props.title}</label>
@@ -311,6 +357,6 @@ var MyOwnInput = React.createClass({
   }
 });
 
-AddTrip.defaultProps = {};
+EditTrip.defaultProps = {};
 
-export default AddTrip;
+export default EditTrip;

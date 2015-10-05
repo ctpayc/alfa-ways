@@ -29,6 +29,14 @@ module.exports = {
       data: data
     });
     WebAPIUtils.createTrip(data);
+  },
+
+  updateTrip: function(data) {
+    AppDispatcher.handleViewAction({
+      type: ActionTypes.CREATE_TRIP,
+      data: data
+    });
+    WebAPIUtils.updateTrip(data);
   }
 
 };

@@ -48,15 +48,15 @@ module.exports = {
   },
 
   loadDriver: function(DriverId) {
-    request.get(APIEndpoints.Driver + '/' + DriverId)
+    request.get(APIEndpoints.Drivers + '/' + DriverId)
       .set('Accept', 'application/json')
       // .set('Authorization', sessionStorage.getItem('accessToken'))
       .end(function(error, res){
         if (res) {
           var json = JSON.parse(res.text);
           ServerActionCreators.receiveDriver(json);
-          // console.log('DriversWebUtils__loadDriver (json) = ');
-          // console.log(json);
+          console.log('DriversWebUtils__loadDriver (json) = ');
+          console.log(json);
         }
       });
   },

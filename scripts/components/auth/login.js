@@ -4,61 +4,84 @@
 'use strict';
 
 import React from 'react';
-import { Link, Route, RouteHandler } from 'react-router';
+import { Link, Route, RouteHandler, Redirect, Navigation } from 'react-router';
 import Formsy from 'formsy-react';
-
 import Loader from 'halogen/MoonLoader';
 var LoginActions = require('../../actions/LoginActions.js');
 var AuthStore = require('../../stores/AuthStore.js');
 var ErrorNotice = require('../common/ErrorNotice.react.js');
+var MessageNotice = require('../common/MessageNotice.react.js');
 
-let { PropTypes } = React;
+var Login = React.createClass ({
 
-class Login extends React.Component {
-
-  constructor(... args) {
-    super(... args);
-    this.state = {
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+  getInitialState: function() {
+    return {
       errors: [],
       isSubmitting: true,
+      messages: [],
+      isLoggedIn: AuthStore.isLoggedIn(),
+      isBusy: false
     };
-    this._onSubmit = this._onSubmit.bind(this);
-    this._onChange = this._onChange.bind(this);
-    this.enableButton = this.enableButton.bind(this);
-    this.disableButton = this.disableButton.bind(this);
-    console.log('login.js state........');
-    console.log(this.state);
-  }
+  },
 
-  componentDidMount() {
+  componentWillMount: function() {
+    if (this.state.isLoggedIn) {
+      this.setState({messages: ['You are already logged in!']});
+    }
+  },
+  componentDidMount: function() {
     AuthStore.addChangeListener(this._onChange);
-  }
-
-  componentWillUnmount() {
+  },
+  componentWillUnmount: function() {
     AuthStore.removeChangeListener(this._onChange);
-  }
+  },
 
-  _onChange() {
-    this.setState({ errors: AuthStore.getErrors() });
-  }
+  _onChange: function(event) {
+    var self = this;
+    this.setState({ errors: AuthStore.getErrors(), isLoggedIn: AuthStore.isLoggedIn(), isBusy: false});
+    if (this.state.errors.length == 0) {
+      this.setState({messages: ['Logged in successfully!']});
+      setTimeout(function () {
+        self.context.router.transitionTo('/');
+      }, 3000);
+    }
+  },
 
-  _onSubmit(data) {
-    console.log(data);
-    this.setState({ errors: [] });
+  _onSubmit: function(data) {
+    this.setState({ errors: [] , isBusy: true});
     LoginActions.login(data.email, data.password);
-  }
-  enableButton() {
+  },
+
+  enableButton: function() {
     this.setState({isSubmitting: true});
-  }
+  },
 
-  disableButton() {
+  disableButton: function() {
     this.setState({isSubmitting: false});
-  }
+  },
 
-  render() {
+  render: function() {
     var errors = (this.state.errors.length > 0) ? <ErrorNotice errors={this.state.errors}/> : <div></div>;
+    var style = {
+            maxWidth: '15%',
+            maxHeight: '10%',
+            margin: 'auto'
+        };
+    var spinner = (this.state.isBusy === true) ? <div style={style}><Loader color="#666666" /></div> : <div></div>;
+    if (this.state.isLoggedIn === true) {
+      var messages = <MessageNotice messages={this.state.messages}/>;
+      return (
+        <div>
+          {messages}
+        </div>
+      );
+    }
     return (
       <div className={'col-md-4'}>
+        {spinner}
         {errors}
         <Formsy.Form onSubmit={this._onSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="form-signin">
           <MyOwnInput name="email" title="Email" validations="isEmail" validationError="Введите правильный электронный адрес" required />
@@ -68,7 +91,8 @@ class Login extends React.Component {
       </div>
     );
   }
-}
+});
+
 var MyOwnInput = React.createClass({
 
   // Add the Formsy Mixin

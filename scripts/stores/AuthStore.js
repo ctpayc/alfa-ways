@@ -12,6 +12,7 @@ var CHANGE_EVENT = 'change';
 // a 'remember me' using localSgorage
 var _accessToken = localStorage.getItem('accessToken');
 var _email = localStorage.getItem('email');
+var _user_id = localStorage.getItem('user_id');
 var _errors = [];
 
 class AuthStore extends EventEmitter {
@@ -40,6 +41,10 @@ class AuthStore extends EventEmitter {
     return _email;
   }
 
+  getUserId() {
+    return _user_id;
+  }
+
   getErrors() {
     return _errors;
   }
@@ -60,16 +65,18 @@ store.dispatchToken = AppDispatcher.register((payload) => {
       if (action.json && action.json.token) {
         _accessToken = action.json.token;
         _email = action.json.email;
+        _user_id = action.json.user_id;
         // Token will always live in the session so that the API can grab it with no hassle
         localStorage.setItem('accessToken', _accessToken);
         localStorage.setItem('email', _email);
+        localStorage.setItem('user_id', _user_id);
         if (action.json.errors) {
           _errors.unshift(action.json.errors);
           // _errors = action.json.errors;
         }
       }
       if (action.errors) {
-        // console.log(action.errors);
+        console.log(action.errors);
         _errors = $.map(action.errors, function(error, index){
           return error;
         });
@@ -80,8 +87,10 @@ store.dispatchToken = AppDispatcher.register((payload) => {
     case ActionTypes.LOGOUT:
       _accessToken = null;
       _email = null;
+      _user_id = null;
       localStorage.removeItem('accessToken');
       localStorage.removeItem('email');
+      localStorage.removeItem('user_id');
       store.emitChange();
       break;
     }

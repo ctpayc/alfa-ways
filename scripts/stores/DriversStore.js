@@ -4,6 +4,7 @@
 import { EventEmitter } from 'events';
 import AppDispatcher from '../dispatchers/AppDispatcher';
 import AppConstants from '../constants/AppConstants';
+import TripsStore from '../stores/TripsStore';
 
 var ActionTypes = AppConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
@@ -49,6 +50,9 @@ class DriversStore extends EventEmitter {
 let store = new DriversStore();
 
 store.dispatchToken = AppDispatcher.register((payload) => {
+  AppDispatcher.waitFor([
+    TripsStore.dispatchToken
+  ]);
   var action = payload.action;
   // console.log('driversStore__AppDispatcher.register action = ');
   // console.log(action);

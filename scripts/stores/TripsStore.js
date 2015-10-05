@@ -14,7 +14,7 @@ var _trips = [];
 var _errors = {};
 var _messages = [];
 var _newTripId = null;
-var _trip = { id: "", user_id: "", description: "", from_id: "", to_id: "", start: ""};
+var _trip = { id: "", user_id: "", description: "", from_location_id: "", to_location_id: "", start: ""};
 
 class TripsStore extends EventEmitter {
 
@@ -53,7 +53,7 @@ class TripsStore extends EventEmitter {
 
 let store = new TripsStore();
 
-AppDispatcher.register((payload) => {
+store.dispatchToken = AppDispatcher.register((payload) => {
   var action = payload.action;
   // console.log('TripsStore__AppDispatcher.register action = ');
   // console.log(action);

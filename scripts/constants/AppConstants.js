@@ -1,6 +1,6 @@
 import keyMirror from 'react/lib/keyMirror';
 
-var APIRoot = "http://laraveltest";
+var APIRoot = "http://192.168.1.240";
 
 module.exports = {
 
@@ -10,7 +10,8 @@ module.exports = {
     Trips:          APIRoot + "/api/v1/get/trips",
     Trip:           APIRoot + "/api/v1/get/trips",
     AddTrip:        APIRoot + "/api/v1/addtrip",
-    Drivers:        APIRoot + "/api/v1/search-driver",
+    UpdateTrip:     APIRoot + "/api/v1/updatetrip",
+    Drivers:        APIRoot + "/api/v1/get/drivers",
     searchDrivers:  APIRoot + "/api/v1/search-driver"
   },
 
@@ -32,7 +33,9 @@ module.exports = {
     LOAD_TRIP: null,
     RECEIVE_TRIP: null,
     CREATE_TRIP: null,
+    UPDATE_TRIP: null,
     RECEIVE_CREATED_TRIP: null,
+    RECEIVE_UPDATED_TRIP: null,
 
     LOAD_DRIVERS: null,
     SEARCH_DRIVERS: null,
