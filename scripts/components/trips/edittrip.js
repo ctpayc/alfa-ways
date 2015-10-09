@@ -83,7 +83,7 @@ var EditTrip = React.createClass ({
       var style = {
             maxWidth: '5%',
             maxHeight: '10%',
-            margin: 'auto'
+            margin: '50px auto'
         };
       var spinner = <div style={style}><Loader color="#666666" /></div>;
       return (
@@ -102,19 +102,22 @@ var EditTrip = React.createClass ({
       console.log('_____________________this.state.trip.driver_________________');
       console.log(this.state.trip.driver);
       return (
-        <div className={'col-md-4'}>
-          <Formsy.Form onSubmit={this.onSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="form-addtrip">
-            <MyOwnInput type="hidden" name="trip" value={this.state.trip.id} validations="isMoreThan:0" showError required />
-            <MyOwnInputAutocompleteDriver name="driver" title="Driver" defValue={this.state.trip.driver} validations="isMoreThan:0" validationError="Выберите существующего водитея" required />
-            <MyOwnInput name="from" title="From" validations="isMoreThan:0" value={this.state.trip.from_location_id} validationError="Введите правильную локацию" required />
-            <MyOwnInput name="to" title="To" validations="isMoreThan:0" value={this.state.trip.to_location_id} validationError="Введите правильную локацию" required />
-            <div className={'row'}>
-              <MyOwnInputDate type="date" name="departureDay" title="Day" defValue={this.state.trip.departure} validationError="Необходимо указать корректную дату" required />
-              <MyOwnInputTime type="date" name="departureTime" title="Time" defValue={this.state.trip.departure} required />
-            </div>
-            <MyOwnInput type="textarea" name="description" title="Description" value={this.state.trip.description} validations="minLength:1" validationError="Введите краткое описание (комментарий)" required />
-            <button type="submit" disabled={!this.state.isSubmitting}>Submit</button>
-          </Formsy.Form>
+        <div>
+          <h2 className={'text-uppercase'}>Редактирование</h2>
+          <div className={'col-md-4'}>
+            <Formsy.Form onSubmit={this.onSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="form-addtrip">
+              <MyOwnInput type="hidden" name="trip" value={this.state.trip.id} validations="isMoreThan:0" showError required />
+              <MyOwnInputAutocompleteDriver name="driver" title="Водитель" defValue={this.state.trip.driver} validations="isMoreThan:0" validationError="Выберите существующего водитея" required />
+              <MyOwnInput name="from" title="Откуда" validations="isMoreThan:0" value={this.state.trip.from_location_id} validationError="Введите правильную локацию" required />
+              <MyOwnInput name="to" title="Куда" validations="isMoreThan:0" value={this.state.trip.to_location_id} validationError="Введите правильную локацию" required />
+              <div className={'row'}>
+                <MyOwnInputDate type="date" name="departureDay" title="Дата отправления" defValue={this.state.trip.departure} validationError="Необходимо указать корректную дату" required />
+                <MyOwnInputTime type="date" name="departureTime" title="Время отправления" defValue={this.state.trip.departure} required />
+              </div>
+              <MyOwnInputTextArea type="textarea" name="description" title="Описание" value={this.state.trip.description} validations="minLength:1" validationError="Введите краткое описание (комментарий)" required />
+              <button type="submit" disabled={!this.state.isSubmitting} className={'addTripButton'}>СОХРАНИТЬ</button>
+            </Formsy.Form>
+          </div>
         </div>
       );
     }
@@ -290,7 +293,7 @@ var MyOwnInputTime = React.createClass({
     this.setValue(event.currentTarget.value);
   },
   changeDate: function (date) {
-    this.setValue(date.toTimeString());
+    this.setValue(date.toLocaleTimeString());
   },
   render: function () {
     var className = this.props.className + ' ' + (this.showRequired() ? 'required' : this.showError() ? 'error' : null);
@@ -314,7 +317,46 @@ var MyOwnInputTime = React.createClass({
     );
   }
 });
+var MyOwnInputTextArea = React.createClass({
 
+  // Add the Formsy Mixin
+  mixins: [Formsy.Mixin],
+
+  // setValue() will set the value of the component, which in
+  // turn will validate it and the rest of the form
+  changeValue: function (event) {
+    this.setValue(event.currentTarget.value);
+  },
+  render: function () {
+
+    // Set a specific className based on the validation
+    // state of this component. showRequired() is true
+    // when the value is empty and the required prop is
+    // passed to the input. showError() is true when the
+    // value typed is invalid
+    var className = this.props.className + ' ' + (this.showRequired() ? 'required' : this.showError() ? 'error' : null);
+
+    if (this.changeValue) {
+      var divClassName = 'form-group ' + (this.showError() ? 'has-error has-feedback' : '');
+      var errorIcon = (this.showError() ? <span className="glyphicon glyphicon-remove form-control-feedback"></span> : '');
+    } else {
+      var divClassName = 'form-group';
+      var errorIcon = '';
+    }
+    // An error message is returned ONLY if the component is invalid
+    // or the server has returned an error message
+    var errorMessage = this.getErrorMessage();
+
+    return (
+      <div className={divClassName}>
+        <label htmlFor={this.props.name}>{this.props.title}</label>
+        <textarea type={this.props.type || 'text'} name={this.props.name} onChange={this.changeValue} value={this.getValue()} className={'form-control'} rows={'5'} />
+        {errorIcon}
+        <span className='validation-error'>{errorMessage}</span>
+      </div>
+    );
+  }
+});
 var MyOwnInput = React.createClass({
 
   // Add the Formsy Mixin
@@ -344,7 +386,7 @@ var MyOwnInput = React.createClass({
     // or the server has returned an error message
     var errorMessage = this.getErrorMessage();
     if (this.props.type == 'hidden') {
-      var divClassName = '';
+      var divClassName = 'hiddeninput';
     }
     return (
       <div className={divClassName}>

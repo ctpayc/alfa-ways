@@ -82,13 +82,23 @@ store.dispatchToken = AppDispatcher.register((payload) => {
       break;
 
     case ActionTypes.RECEIVE_TRIP:
+      if (action.json) {
+        _trip = action.json.trip;
+        _errors = [];
+        _trip = action.json;
+      }
+      if (action.errors) {
+        _errors = action.errors;
+      }
+      store.emitChange();
+      break;
+
+    case ActionTypes.RECEIVE_MESSAGE:
       // console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIP... trip = ');
       // console.log(_trip);
       if (action.json) {
         // console.log('TripsStore__AppDispatcher.register ActionTypes.RECEIVE_TRIP... action good, trip = ');
-        _trip = action.json.trip;
-        _errors = [];
-        _trip = action.json;
+        _messages = action.json.message;
         // console.log(_trip);
       }
       if (action.errors) {

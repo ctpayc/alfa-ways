@@ -7,6 +7,7 @@ import Trips from './components/trips/trips';
 import Test from './components/test/Test';
 import AddTrip from './components/trips/addtrip';
 import EditTrip from './components/trips/edittrip';
+import DeleteTrip from './components/trips/deletetrip';
 import Login from './components/auth/login';
 import Signup from './components/auth/signup';
 import Currenttrip from './components/trips/currenttrip';
@@ -26,6 +27,7 @@ export default (
     <Route name='page2' path='/2page' handler={Page2} />
     <Route name='addtrip' path='/addtrip' handler={AddTrip} />
     <Route name='edittrip' path='/edittrip/:tripId' handler={EditTrip} />
+    <Route name='deletetrip' path='/deletetrip/:tripId' handler={DeleteTrip} />
     <Route name='test' path='/test' handler={Test} />
     <Route name='maintrips2' path='/maintrips2' handler={MainTrips} />
     <NotFoundRoute handler={Page4} />

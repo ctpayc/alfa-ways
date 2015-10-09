@@ -32,13 +32,12 @@ class TopNavbar extends React.Component {
       </ul>
     ) : (
       <ul className="nav navbar-nav navbar-right">
-        <li><Link to="login">Login</Link></li>
-        <li><Link to="signup">Sign up</Link></li>
+        <li><Link to="login">Вход</Link></li>
       </ul>
     );
     var addtrip = this.props.isLoggedIn ? (<li><Link to="addtrip">Добавить поездку</Link></li>) : null;
     return (
-      <nav className='navbar navbar-default'>
+      <nav className='navbar navbar-default navbar-fixed-top'>
         <div className="container-fluid">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -47,7 +46,7 @@ class TopNavbar extends React.Component {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <Link to="app" className="navbar-brand">Main page</Link>
+            <Link to="app" className="navbar-brand">ALFA-WAYS</Link>
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">

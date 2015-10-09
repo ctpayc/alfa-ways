@@ -133,6 +133,29 @@ module.exports = {
         }
       }
     });
+  },
+
+  deleteTrip: function(tripId) {
+    request.post(APIEndpoints.DeleteTrip + '/' + tripId)
+    .set('Accept', 'application/json')
+    .type('json')
+    .end(function(error, res){
+      if(error) {
+        console.log('error!!! ');
+        console.log(error);
+      }
+      if(res) {
+        if (res.error) {
+          var errorMsgs = _getErrors(res);
+          ServerActionCreators.receiveMessage(null, errorMsgs);
+        } else {
+          var json = JSON.parse(res.text);
+          console.log('TripsWebUtils__deleteTrip___________');
+          console.log(json);
+          ServerActionCreators.receiveMessage(json, null);
+        }
+      }
+    });
   }
 
 };

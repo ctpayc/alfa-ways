@@ -9,8 +9,13 @@ import TripActions from '../../actions/TripActions';
 import { Link, Route, RouteHandler } from 'react-router';
 import Loader from 'halogen/MoonLoader';
 import AuthStore from '../../stores/AuthStore';
+import Moment from 'moment';
+Moment.locale('ru');
 
 var ErrorNotice = require('../common/ErrorNotice.react.js');
+
+var Modal = require('react-bootstrap/lib/Modal');
+var Button = require('react-bootstrap/lib/Button');
 
 class Currenttrip extends React.Component {
 
@@ -21,8 +26,11 @@ class Currenttrip extends React.Component {
       loadContent: false,
       errors: [],
       isLoggedIn: AuthStore.isLoggedIn(),
+      showModal: false
     };
     this.onChange = this.onChange.bind(this);
+    this.open = this.open.bind(this);
+    this.close = this.close.bind(this);
     console.log(this.state);
   }
 
@@ -47,12 +55,20 @@ class Currenttrip extends React.Component {
     });
   }
 
+  close() {
+    this.setState({ showModal: false });
+  }
+
+  open() {
+    this.setState({ showModal: true });
+  }
+
   render () {
     console.log('isLoggedIn & user_id');
     console.log(this.state.isLoggedIn);
     console.log(this.state.trip.user_id);
     console.log(AuthStore.getUserId());
-    var editButton = (this.state.isLoggedIn === true && this.state.trip.user_id == AuthStore.getUserId()) ? <Link to="edittrip" params={{tripId: this.props.params.tripId}}>edit</Link> : <div></div>;
+    var editButton = (this.state.isLoggedIn === true && this.state.trip.user_id == AuthStore.getUserId()) ? <div className={'editButtonBlock'}><Link to="edittrip" className={'btn-info'} params={{tripId: this.props.params.tripId}}>РЕДАКТИРОВАТЬ</Link><a className={'btn-danger'} href="#" onClick={this.open}>УДАЛИТЬ</a></div> : <div></div>;
     if (isEmpty(this.state.trip)) {
       this.state.errors.push('no trip');
       errors = <ErrorNotice errors={this.state.errors}/>;
@@ -62,24 +78,39 @@ class Currenttrip extends React.Component {
       var style = {
               maxWidth: '5%',
               maxHeight: '10%',
-              margin: 'auto'
+              margin: '50px auto'
           };
       var errors = (this.state.errors.length > 0) ? <ErrorNotice errors={this.state.errors}/> : <div></div>;
       var spinner = (this.state.loadContent === false) ? <div style={style}><Loader color="#26A65B" /></div> : <div>
-          <h1>Trip id: {tripId}</h1>
-          <h1>Водитель: {driverName}</h1>
-          <h2>Откуда: {this.state.trip.from_location_id}</h2>
-          <h2>Куда: {this.state.trip.to_location_id}</h2>
-          <h2>Время отправления: {this.state.trip.departure}</h2>
-          <h2>Время прибытия: {this.state.trip.arrival}</h2>
-          <h2>Description: {this.state.trip.description}</h2>
-          {editButton}
+          <h1>{driverName}</h1>
+          <div className={'col-md-12 fulltrip'}>
+            <h4>Время отправления: {Moment(this.state.trip.departure).format('LLL')}</h4>
+            <h4>Откуда: {this.state.trip.from_location_id}</h4>
+            <h4>Куда: {this.state.trip.to_location_id}</h4>
+            <h4>Описание: {this.state.trip.description}</h4>
+            <h4>Телефон: 8-909-516-20-00</h4>
+          </div>
+          <div className={'col-md-12 editTripButton'}>
+            {editButton}
+          </div>
           </div>;
     }
     return (
       <div className="Task">
         {spinner}
         {errors}
+        <Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>Удаление</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Вы действительн хотите удалить поездку?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Link to="deletetrip" className={'btn btn-danger'} params={{tripId: this.props.params.tripId}}>Удалить</Link>
+            <Button onClick={this.close}>Отмена</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

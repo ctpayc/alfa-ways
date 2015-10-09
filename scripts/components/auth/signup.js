@@ -52,7 +52,7 @@ var Signup = React.createClass ({
     var style = {
             maxWidth: '15%',
             maxHeight: '10%',
-            margin: 'auto'
+            margin: '50px auto'
         };
     var spinner = (this.state.isBusy === true) ? <div style={style}><Loader color="#666666" /></div> : <div></div>;
     if (this.state.isLoggedIn === true) {

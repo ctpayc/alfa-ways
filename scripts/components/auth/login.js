@@ -68,7 +68,7 @@ var Login = React.createClass ({
     var style = {
             maxWidth: '15%',
             maxHeight: '10%',
-            margin: 'auto'
+            margin: '50px auto'
         };
     var spinner = (this.state.isBusy === true) ? <div style={style}><Loader color="#666666" /></div> : <div></div>;
     if (this.state.isLoggedIn === true) {
@@ -80,14 +80,17 @@ var Login = React.createClass ({
       );
     }
     return (
-      <div className={'col-md-4'}>
-        {spinner}
-        {errors}
-        <Formsy.Form onSubmit={this._onSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="form-signin">
-          <MyOwnInput name="email" title="Email" validations="isEmail" validationError="Введите правильный электронный адрес" required />
-          <MyOwnInput name="password" title="Password" type="password" required />
-          <button type="submit" disabled={!this.state.isSubmitting}>Submit</button>
-        </Formsy.Form>
+      <div>
+        <h2>ВХОД</h2>
+        <div className={'col-md-4'}>
+          {spinner}
+          {errors}
+          <Formsy.Form onSubmit={this._onSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="form-signin">
+            <MyOwnInput name="email" title="Email" validations="isEmail" validationError="Введите правильный электронный адрес" required />
+            <MyOwnInput name="password" title="Password" type="password" required />
+            <button type="submit" className={'btn btn-success'} disabled={!this.state.isSubmitting}>Войти</button>
+          </Formsy.Form>
+        </div>
       </div>
     );
   }

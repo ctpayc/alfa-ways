@@ -50,7 +50,7 @@ class Trips extends React.Component {
     var style = {
             maxWidth: '5%',
             maxHeight: '10%',
-            margin: 'auto'
+            margin: '50px auto'
         };
     var spinner = (this.state.loadContent === false) ? <div style={style}><Loader color="#666666" /></div> : <TripsList trips={this.state.trips} />;
     return (

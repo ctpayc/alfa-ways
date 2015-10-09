@@ -1,3 +1,6 @@
+.text-uppercase{
+	text-transform: uppercase;
+}
 .deSelectItem {
 	background: white;
 }
@@ -9,15 +12,53 @@
 }
 .trip-search-results {
 	margin: 0 0 0 -10px;
-	border-top: 1px solid #CCC;
+	border-top: 1px solid #666666;
 }
 .trip {
 	list-style: none;
 	border: 0;
-	border-bottom: 1px solid #CCC;
+	border-bottom: 1px solid #666666;
+	max-height: 100px;
+	overflow: hidden;
+}
+.fulltrip {
+	border-bottom: 1px solid #666666;
+	margin-bottom: 10px;
+}
+.editBlock a {
+	margin-right: 20px;
+}
+.editTripButton, .editTripButton a {
+	margin-right: 10px;
+	padding: 5px 10px;
+}
+.addTripButton, .addTripButton a {
+	color: red;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+.addTripButton:hover{
+	text-decoration: underline;
+}
+.addTripButton:disabled, .addTripButton:disabled:hover {
+	color:#ccc;
+	text-decoration: none;
 }
 .validation-error {
 	color: #670c09;
 	margin: 5px 0 0 0;
 	display: inline-block;
+}
+.form-signin{
+	/*padding: 20px 0 0 25px;*/
+}
+.form-addtrip{
+	/*padding: 20px 0px 0px 25px;*/
+}
+.hiddeninput{
+	height: 0px;
+}
+.margintop{
+	margin-top: 10px;
 }

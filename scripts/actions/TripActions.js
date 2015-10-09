@@ -37,6 +37,14 @@ module.exports = {
       data: data
     });
     WebAPIUtils.updateTrip(data);
+  },
+
+  deleteTrip: function(tripId) {
+    AppDispatcher.handleViewAction({
+      type: ActionTypes.DELETE_TRIP,
+      tripId: tripId
+    });
+    WebAPIUtils.deleteTrip(tripId);
   }
 
 };

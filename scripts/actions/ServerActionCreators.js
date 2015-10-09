@@ -48,10 +48,18 @@ module.exports = {
       json: json
     });
   },
-  
+
   receiveCreatedTrip: function(json, errors) {
     AppDispatcher.handleServerAction({
       type: ActionTypes.RECEIVE_CREATED_TRIP,
+      json: json,
+      errors: errors
+    });
+  },
+
+  receiveMessage: function(json, errors) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_MESSAGE,
       json: json,
       errors: errors
     });

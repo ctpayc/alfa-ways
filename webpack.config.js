@@ -20,6 +20,12 @@ module.exports = {
   entry: [
     'webpack/hot/only-dev-server',
     'webpack-dev-server/client?http://' + ip + ':' + port,
+    'es5-shim',
+    'es5-shim/es5-sham',
+    'es6-shim',
+    'es6-shim/es6-sham',
+    'html5shiv',
+    'html5shiv/dist/html5shiv-printshiv.js',
     './scripts/index'
   ],
   output: {
