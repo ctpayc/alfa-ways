@@ -68,13 +68,15 @@ class Currenttrip extends React.Component {
     console.log(this.state.isLoggedIn);
     console.log(this.state.trip.user_id);
     console.log(AuthStore.getUserId());
-    var editButton = (this.state.isLoggedIn === true && this.state.trip.user_id == AuthStore.getUserId()) ? <div className={'editButtonBlock'}><Link to="edittrip" className={'btn-info'} params={{tripId: this.props.params.tripId}}>РЕДАКТИРОВАТЬ</Link><a className={'btn-danger'} href="#" onClick={this.open}>УДАЛИТЬ</a></div> : <div></div>;
+    var editButton = (this.state.isLoggedIn === true && this.state.trip.user_id == AuthStore.getUserId()) ? <div><Link to="edittrip" className={'btn btn-info'} params={{tripId: this.props.params.tripId}}>РЕДАКТИРОВАТЬ</Link><a className={'btn btn-danger'} href="#" onClick={this.open}>УДАЛИТЬ</a></div> : <div></div>;
     if (isEmpty(this.state.trip)) {
       this.state.errors.push('no trip');
       errors = <ErrorNotice errors={this.state.errors}/>;
     } else {
       var tripId = this.props.params.tripId;
       var driverName = (this.state.loadContent === true && this.state.trip.driver !== null) ? this.state.trip.driver.name: 'не найден';
+      var from_location = (this.state.loadContent === true && this.state.trip.from_location !== null) ? 'г. ' + this.state.trip.from_location[0].name + ', ' + this.state.trip.from_location[0].region: 'город не найден';
+      var to_location = (this.state.loadContent === true && this.state.trip.to_location !== null) ? 'г. ' + this.state.trip.to_location[0].name + ', ' + this.state.trip.to_location[0].region: 'город не найден';
       var style = {
               maxWidth: '5%',
               maxHeight: '10%',
@@ -85,12 +87,12 @@ class Currenttrip extends React.Component {
           <h1>{driverName}</h1>
           <div className={'col-md-12 fulltrip'}>
             <h4>Время отправления: {Moment(this.state.trip.departure).format('LLL')}</h4>
-            <h4>Откуда: {this.state.trip.from_location_id}</h4>
-            <h4>Куда: {this.state.trip.to_location_id}</h4>
+            <h4>Откуда: {from_location}</h4>
+            <h4>Куда: {to_location}</h4>
             <h4>Описание: {this.state.trip.description}</h4>
             <h4>Телефон: 8-909-516-20-00</h4>
           </div>
-          <div className={'col-md-12 editTripButton'}>
+          <div className={'col-md-12 blockButton'}>
             {editButton}
           </div>
           </div>;

@@ -8,7 +8,6 @@ import Formsy from 'formsy-react';
 import { Link, Route, RouteHandler, Redirect, Navigation } from 'react-router';
 import TripActions from '../../actions/TripActions';
 import TripsStore from '../../stores/TripsStore';
-import AutocompleteDrivers from '../autocomplete/AutocompleteDrivers';
 import Loader from 'halogen/MoonLoader';
 
 var ErrorNotice = require('../common/ErrorNotice.react.js');
@@ -115,7 +114,10 @@ var EditTrip = React.createClass ({
                 <MyOwnInputTime type="date" name="departureTime" title="Время отправления" defValue={this.state.trip.departure} required />
               </div>
               <MyOwnInputTextArea type="textarea" name="description" title="Описание" value={this.state.trip.description} validations="minLength:1" validationError="Введите краткое описание (комментарий)" required />
-              <button type="submit" disabled={!this.state.isSubmitting} className={'addTripButton'}>СОХРАНИТЬ</button>
+              <div className={'blockButton'}>
+                <button type="submit" disabled={!this.state.isSubmitting} className={'btn btn-info'}>СОХРАНИТЬ</button>
+                <button type="submit" disabled={!this.state.isSubmitting} className={'btn btn-default'}>ОТМЕНА</button>
+              </div>
             </Formsy.Form>
           </div>
         </div>

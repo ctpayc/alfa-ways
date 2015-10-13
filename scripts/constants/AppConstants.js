@@ -7,15 +7,17 @@ var APIRoot = "http://laraveltest";
 module.exports = {
 
   APIEndpoints: {
-    LOGIN:          APIRoot + "/api/v1/login",
-    REGISTRATION:   APIRoot + "/api/v1/signup",
-    Trips:          APIRoot + "/api/v1/get/trips",
-    Trip:           APIRoot + "/api/v1/get/trips",
-    AddTrip:        APIRoot + "/api/v1/addtrip",
-    UpdateTrip:     APIRoot + "/api/v1/updatetrip",
-    DeleteTrip:     APIRoot + "/api/v1/deletetrip",
-    Drivers:        APIRoot + "/api/v1/get/drivers",
-    searchDrivers:  APIRoot + "/api/v1/search-driver"
+    LOGIN:           APIRoot + "/api/v1/login",
+    REGISTRATION:    APIRoot + "/api/v1/signup",
+    Trips:           APIRoot + "/api/v1/get/trips",
+    Trip:            APIRoot + "/api/v1/get/trips",
+    AddTrip:         APIRoot + "/api/v1/addtrip",
+    UpdateTrip:      APIRoot + "/api/v1/updatetrip",
+    DeleteTrip:      APIRoot + "/api/v1/deletetrip",
+    Drivers:         APIRoot + "/api/v1/get/drivers",
+    searchDrivers:   APIRoot + "/api/v1/search-driver",
+    Loactions:       APIRoot + "/api/v1/get/locations",
+    searchLocations: APIRoot + "/api/v1/search-location"
   },
 
   PayloadSources: keyMirror({
@@ -49,7 +51,16 @@ module.exports = {
     RECEIVE_DRIVER: null,
     CREATE_DRIVER: null,
     RECEIVE_CREATED_DRIVER: null,
-    RECEIVE_SEARCH_DRIVER: null
+    RECEIVE_SEARCH_DRIVER: null,
+
+    LOAD_LOCATIONS: null,
+    SEARCH_LOCATIONS: null,
+    RECEIVE_LOCATIONS: null,
+    LOAD_LOCATION: null,
+    RECEIVE_LOCATION: null,
+    CREATE_LOCATION: null,
+    RECEIVE_CREATED_LOCATION: null,
+    RECEIVE_SEARCH_LOCATION: null
   })
 
 };

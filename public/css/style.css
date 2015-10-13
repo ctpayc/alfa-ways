@@ -25,10 +25,10 @@
 	border-bottom: 1px solid #666666;
 	margin-bottom: 10px;
 }
-.editBlock a {
+.blockButton, .blockButton a, .blockButton button {
 	margin-right: 20px;
 }
-.editTripButton, .editTripButton a {
+.editTripButton, .editTripButton a, .editTripButton button{
 	margin-right: 10px;
 	padding: 5px 10px;
 }
@@ -60,5 +60,8 @@
 	height: 0px;
 }
 .margintop{
+	margin-top: 10px;
+}
+.user h3 {
 	margin-top: 10px;
 }

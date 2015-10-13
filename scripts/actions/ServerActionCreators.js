@@ -49,6 +49,28 @@ module.exports = {
     });
   },
 
+
+  receiveLocations: function(json) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_LOCATIONS,
+      json: json
+    });
+  },
+
+  receiveLocationSearch: function(json) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_SEARCH_LOCATION,
+      json: json
+    });
+  },
+
+  receiveLocation: function(json) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_LOCATION,
+      json: json
+    });
+  },
+
   receiveCreatedTrip: function(json, errors) {
     AppDispatcher.handleServerAction({
       type: ActionTypes.RECEIVE_CREATED_TRIP,
