@@ -75,8 +75,8 @@ class Currenttrip extends React.Component {
     } else {
       var tripId = this.props.params.tripId;
       var driverName = (this.state.loadContent === true && this.state.trip.driver !== null) ? this.state.trip.driver.name: 'не найден';
-      var from_location = (this.state.loadContent === true && this.state.trip.from_location !== null) ? 'г. ' + this.state.trip.from_location[0].name + ', ' + this.state.trip.from_location[0].region: 'город не найден';
-      var to_location = (this.state.loadContent === true && this.state.trip.to_location !== null) ? 'г. ' + this.state.trip.to_location[0].name + ', ' + this.state.trip.to_location[0].region: 'город не найден';
+      var from_location = (this.state.loadContent === true && this.state.trip.from_location.length > 0) ? 'г. ' + this.state.trip.from_location[0].name + ', ' + this.state.trip.from_location[0].region: 'город не найден';
+      var to_location = (this.state.loadContent === true && this.state.trip.to_location.length > 0) ? 'г. ' + this.state.trip.to_location[0].name + ', ' + this.state.trip.to_location[0].region: 'город не найден';
       var style = {
               maxWidth: '5%',
               maxHeight: '10%',

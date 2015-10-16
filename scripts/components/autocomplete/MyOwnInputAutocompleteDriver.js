@@ -17,6 +17,15 @@ var MyOwnInputAutocompleteDriver = React.createClass ({
     }
   },
 
+  componentWillMount: function() {
+    if (this.props.defValue != undefined) {
+      var defId = this.props.defValue.id;
+      var defLabel = this.props.defValue.name;
+      this.setState({options: [{id: defId, label: defLabel}], defDriver: defId});
+      this.updateValue(this.props.defValue);
+    }
+  },
+
   componentDidMount: function() {
     DriversStore.addChangeListener(this._onChange);
   },
@@ -102,7 +111,7 @@ var MyOwnInputAutocompleteDriver = React.createClass ({
         <label htmlFor={this.props.name}>{this.props.title}</label>
         <Select
           placeholder='Введите ФИО водителя'
-          defaultValue={null}
+          defaultValue={this.state.defDriver}
           valueField='id'
           textField='label'
           data={this.state.options}

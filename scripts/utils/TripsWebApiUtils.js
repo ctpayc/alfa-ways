@@ -19,45 +19,6 @@ var APIEndpoints = AppConstants.APIEndpoints;
 
 module.exports = {
 
-  signup: function(email, username, password, passwordConfirmation) {
-    request.post(APIEndpoints.REGISTRATION)
-      .send({ user: { 
-        email: email, 
-        username: username,
-        password: password,
-        password_confirmation: passwordConfirmation
-      }})
-      .set('Accept', 'application/json')
-      .end(function(error, res) {
-        if (res) {
-          if (res.error) {
-            var errorMsgs = _getErrors(res);
-            ServerActionCreators.receiveLogin(null, errorMsgs);
-          } else {
-            json = JSON.parse(res.text);
-            ServerActionCreators.receiveLogin(json, null);
-          }
-        }
-      });
-  },
-
-  login: function(email, password) {
-    request.post(APIEndpoints.LOGIN)
-      .send({ username: email, password: password, grant_type: 'password' })
-      .set('Accept', 'application/json')
-      .end(function(error, res){
-        if (res) {
-          if (res.error) {
-            var errorMsgs = _getErrors(res);
-            ServerActionCreators.receiveLogin(null, errorMsgs);
-          } else {
-            json = JSON.parse(res.text);
-            ServerActionCreators.receiveLogin(json, null);
-          }
-        }
-      });
-  },
-
   loadTrips: function() {
     console.log('TripsWebUtils__loadTrips (APIEndpoints.Trips) = ' + APIEndpoints.Trips);
     request.get(APIEndpoints.Trips)
@@ -91,7 +52,7 @@ module.exports = {
     request.post(APIEndpoints.AddTrip)
     .set('Accept', 'application/json')
     .type('json')
-    .send({"description":data.description, "user_id": data.driver, "from": data.from, "to": data.to, "departureDay": data.departureDay, "departureTime": data.departureTime})
+    .send({"description":data.description, "user_id": localStorage.getItem('user_id'), "driver_id": data.driver, "from": data.from, "to": data.to, "departureDay": data.departureDay, "departureTime": data.departureTime})
     .end(function(error, res){
       if(error) {
         console.log('error!!! ');
@@ -115,7 +76,7 @@ module.exports = {
     request.post(APIEndpoints.UpdateTrip + '/' + data.trip)
     .set('Accept', 'application/json')
     .type('json')
-    .send({"description":data.description, "user_id": data.driver, "from": data.from, "to": data.to, "departureDay": data.departureDay, "departureTime": data.departureTime})
+    .send({"description":data.description, "user_id": localStorage.getItem('user_id'), "driver_id": data.driver, "from": data.from, "to": data.to, "departureDay": data.departureDay, "departureTime": data.departureTime})
     .end(function(error, res){
       if(error) {
         console.log('error!!! ');

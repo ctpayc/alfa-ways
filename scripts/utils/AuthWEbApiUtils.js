@@ -49,9 +49,9 @@ module.exports = {
       });
   },
 
-  login: function(email, password) {
+  login: function(username, password) {
     request.post(APIEndpoints.LOGIN)
-      .send({ email: email, password: password, grant_type: 'password' })
+      .send({ username: username, password: password, grant_type: 'password' })
       .set('Accept', 'application/json')
       .end(function(error, res){
         if (res) {

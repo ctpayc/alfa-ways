@@ -2,12 +2,14 @@ import keyMirror from 'react/lib/keyMirror';
 
 // var APIRoot = "http://192.168.182.184:4000";
 // var APIRoot = "http://192.168.1.240:4000";
+// var APIRoot = "http://192.168.1.166:4000";
 var APIRoot = "http://laraveltest";
 
 module.exports = {
 
   APIEndpoints: {
-    LOGIN:           APIRoot + "/api/v1/login",
+    // LOGIN:           APIRoot + "/api/v1/login",
+    LOGIN:           APIRoot + "/api/v1/ldaplogin", //ldap auth
     REGISTRATION:    APIRoot + "/api/v1/signup",
     Trips:           APIRoot + "/api/v1/get/trips",
     Trip:            APIRoot + "/api/v1/get/trips",

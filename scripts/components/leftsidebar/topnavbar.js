@@ -22,7 +22,7 @@ class TopNavbar extends React.Component {
     var rightNav = this.props.isLoggedIn ? (
       <ul className="nav navbar-nav navbar-right">
         <li className="dropdown">
-          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.props.email}<span className="caret"></span></a>
+          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.props.username}<span className="caret"></span></a>
           <ul className="dropdown-menu" role="menu">
             <li><a href="#">Мои поездки</a></li>
             <li className="divider"></li>

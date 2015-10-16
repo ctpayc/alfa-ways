@@ -106,7 +106,7 @@ var AddTrip = React.createClass ({
               <MyOwnInputTextArea type="textarea" name="description" title="Описание" validations="minLength:1" validationError="Введите краткое описание (комментарий)" required />
               <div className={'blockButton'}>
                 <button type="submit" disabled={!this.state.isSubmitting} className={'btn btn-success'}>СОХРАНИТЬ</button>
-                <button type="submit" className={'btn btn-default'}>ОТМЕНА</button>
+                <Link to="trips" className={'btn btn-default'}>ОТМЕНА</Link>
               </div>
             </Formsy.Form>
           </div>

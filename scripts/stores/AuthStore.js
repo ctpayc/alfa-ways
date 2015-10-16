@@ -11,7 +11,7 @@ var CHANGE_EVENT = 'change';
 // Load an access token from the session storage, you might want to implement
 // a 'remember me' using localSgorage
 var _accessToken = localStorage.getItem('accessToken');
-var _email = localStorage.getItem('email');
+var _username = localStorage.getItem('username');
 var _user_id = localStorage.getItem('user_id');
 var _errors = [];
 
@@ -37,8 +37,8 @@ class AuthStore extends EventEmitter {
     return _accessToken;
   }
 
-  getEmail() {
-    return _email;
+  getUsername() {
+    return _username;
   }
 
   getUserId() {
@@ -64,11 +64,11 @@ store.dispatchToken = AppDispatcher.register((payload) => {
       _errors = [];
       if (action.json && action.json.token) {
         _accessToken = action.json.token;
-        _email = action.json.email;
+        _username = action.json.username;
         _user_id = action.json.user_id;
         // Token will always live in the session so that the API can grab it with no hassle
         localStorage.setItem('accessToken', _accessToken);
-        localStorage.setItem('email', _email);
+        localStorage.setItem('username', _username);
         localStorage.setItem('user_id', _user_id);
         if (action.json.errors) {
           _errors.unshift(action.json.errors);
@@ -86,10 +86,10 @@ store.dispatchToken = AppDispatcher.register((payload) => {
 
     case ActionTypes.LOGOUT:
       _accessToken = null;
-      _email = null;
+      _username = null;
       _user_id = null;
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('email');
+      localStorage.removeItem('username');
       localStorage.removeItem('user_id');
       store.emitChange();
       break;

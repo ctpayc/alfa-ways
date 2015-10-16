@@ -52,7 +52,7 @@ var Login = React.createClass ({
 
   _onSubmit: function(data) {
     this.setState({ errors: [] , isBusy: true});
-    LoginActions.login(data.email, data.password);
+    LoginActions.login(data.username, data.password);
   },
 
   enableButton: function() {
@@ -86,7 +86,7 @@ var Login = React.createClass ({
           {spinner}
           {errors}
           <Formsy.Form onSubmit={this._onSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="form-signin">
-            <MyOwnInput name="email" title="Email" validations="isEmail" validationError="Введите правильный электронный адрес" required />
+            <MyOwnInput name="username" title="Username" validations="minLength:1" validationError="Введите правильный логин" required />
             <MyOwnInput name="password" title="Password" type="password" required />
             <button type="submit" className={'btn btn-success'} disabled={!this.state.isSubmitting}>Войти</button>
           </Formsy.Form>

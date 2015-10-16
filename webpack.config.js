@@ -18,8 +18,8 @@ node = {
 module.exports = {
   devtool: 'eval',
   entry: [
-    'webpack/hot/only-dev-server',
-    'webpack-dev-server/client?http://' + ip + ':' + port,
+    /*'webpack/hot/only-dev-server',
+    'webpack-dev-server/client?http://' + ip + ':' + port,*/
     'es5-shim',
     'es5-shim/es5-sham',
     'es6-shim',

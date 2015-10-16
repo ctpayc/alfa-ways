@@ -24,7 +24,7 @@ export default class App extends React.Component {
     this.state = {
       loadContent: false,
       isLoggedIn: AuthStore.isLoggedIn(),
-      email: AuthStore.getEmail()
+      username: AuthStore.getUsername()
     };
     console.log(this.state);
     this._onChange = this._onChange.bind(this);
@@ -45,7 +45,7 @@ export default class App extends React.Component {
     console.log(loginState);
     this.setState({
       isLoggedIn: AuthStore.isLoggedIn(),
-      email: AuthStore.getEmail()
+      username: AuthStore.getUsername()
     });
     console.log(this.state.isLoggedIn);
     if (loginState === false && this.state.isLoggedIn === true) {
@@ -58,7 +58,7 @@ export default class App extends React.Component {
         <div className="App">
           <TopNavbar 
             isLoggedIn={this.state.isLoggedIn}
-            email={this.state.email} />
+            username={this.state.username} />
           <div className="container-fluid">
             {/* <div className="col-md-2">
               <LeftNavbar item1="MainLeftMenu" />

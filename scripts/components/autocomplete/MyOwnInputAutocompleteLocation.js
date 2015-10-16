@@ -21,6 +21,17 @@ var MyOwnInputAutocompleteLocation = React.createClass ({
     }
   },
 
+  componentWillMount: function() {
+    if (this.props.defValue != undefined) {
+      console.log('defValue------------------');
+      console.log(this.props.defValue);
+      var defId = this.props.defValue.city_id;
+      var defLabel = this.props.defValue.name;
+      this.setState({options: [{id: defId, label: defLabel}], defLocation: defLabel});
+      this.updateValue(this.props.defValue);
+    }
+  },
+
   componentDidMount: function() {
     LocationsStore.addChangeListener(this._onChange);
   },
@@ -34,7 +45,9 @@ var MyOwnInputAutocompleteLocation = React.createClass ({
   },
 
   updateValue: function(values) {
-    this.setValue(values.id);
+    console.log('updateValue----------------------');
+    console.log(values);
+    this.setValue(values.city_id);
   },
 
   inputChangeDebounced2: function(name) {
@@ -96,7 +109,7 @@ var MyOwnInputAutocompleteLocation = React.createClass ({
         <label htmlFor={this.props.name}>{this.props.title}</label>
         <Select
           placeholder='Введите название города'
-          defaultValue={null}
+          defaultValue={this.state.defLocation}
           valueField='id'
           textField='label'
           data={this.state.options}
