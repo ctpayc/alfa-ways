@@ -101,7 +101,7 @@ var MyOwnInputAutocompleteDriver = React.createClass ({
           return (
             <div>
               <strong>{person.label}</strong>
-              <p><span>{person.post} {person.place}</span></p>
+              <p><span>{person.post} {person.department}</span></p>
             </div>);
         }
       }

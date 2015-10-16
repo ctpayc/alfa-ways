@@ -74,9 +74,25 @@ class Currenttrip extends React.Component {
       errors = <ErrorNotice errors={this.state.errors}/>;
     } else {
       var tripId = this.props.params.tripId;
-      var driverName = (this.state.loadContent === true && this.state.trip.driver !== null) ? this.state.trip.driver.name: 'не найден';
-      var from_location = (this.state.loadContent === true && this.state.trip.from_location.length > 0) ? 'г. ' + this.state.trip.from_location[0].name + ', ' + this.state.trip.from_location[0].region: 'город не найден';
-      var to_location = (this.state.loadContent === true && this.state.trip.to_location.length > 0) ? 'г. ' + this.state.trip.to_location[0].name + ', ' + this.state.trip.to_location[0].region: 'город не найден';
+      // var driverName = (this.state.loadContent === true && this.state.trip.driver !== null) ? this.state.trip.driver.name: 'не найден';
+      // var driverPhone = (this.state.loadContent === true && this.state.trip.driver !== null) ? this.state.trip.driver.phone: '-';
+      // var driverEmail = (this.state.loadContent === true && this.state.trip.driver !== null) ? this.state.trip.driver.email: '-';
+      // var from_location = (this.state.loadContent === true && this.state.trip.from_location.length > 0) ? 'г. ' + this.state.trip.from_location[0].name + ', ' + this.state.trip.from_location[0].region: 'город не найден';
+      // var to_location = (this.state.loadContent === true && this.state.trip.to_location.length > 0) ? 'г. ' + this.state.trip.to_location[0].name + ', ' + this.state.trip.to_location[0].region: 'город не найден';
+      if (this.state.loadContent === true) {
+        if (this.state.trip.driver !== null) {
+          var driverName = this.state.trip.driver.name;
+          var driverEmail = this.state.trip.driver.email;
+          var driverPhone = this.state.trip.driver.phone;
+        }
+        if (this.state.trip.from_location.length > 0) {
+          var from_location = 'г. ' + this.state.trip.from_location[0].name + ', ' + this.state.trip.from_location[0].region: 'город не найден';
+          var to_location = 'г. ' + this.state.trip.to_location[0].name + ', ' + this.state.trip.to_location[0].region: 'город не найден';
+        } else {
+          var from_location = 'город не найден';
+          var to_location = 'город не найден';
+        }
+      }
       var style = {
               maxWidth: '5%',
               maxHeight: '10%',
@@ -90,7 +106,8 @@ class Currenttrip extends React.Component {
             <h4>Откуда: {from_location}</h4>
             <h4>Куда: {to_location}</h4>
             <h4>Описание: {this.state.trip.description}</h4>
-            <h4>Телефон: 8-909-516-20-00</h4>
+            <h4>Телефон: {driverPhone}</h4>
+            <h4>Email: {driverEmail}</h4>
           </div>
           <div className={'col-md-12 blockButton'}>
             {editButton}
