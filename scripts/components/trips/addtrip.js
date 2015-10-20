@@ -103,7 +103,7 @@ var AddTrip = React.createClass ({
                 <MyOwnInputDate type="date" name="departureDay" title="Дата отправления" validationError="Необходимо указать корректную дату" required />
                 <MyOwnInputTime type="date" name="departureTime" title="Время отправления" required />
               </div>
-              <MyOwnInputTextArea type="textarea" name="description" title="Описание" validations="minLength:1" validationError="Введите краткое описание (комментарий)" required />
+              <MyOwnInputTextArea type="textarea" name="description" title="Описание" />
               <div className={'blockButton'}>
                 <button type="submit" disabled={!this.state.isSubmitting} className={'btn btn-success'}>СОХРАНИТЬ</button>
                 <Link to="trips" className={'btn btn-default'}>ОТМЕНА</Link>
